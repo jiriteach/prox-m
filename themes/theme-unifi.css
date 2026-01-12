@@ -356,8 +356,9 @@ div[class*="rrd"] img {
     opacity: 0.6;
 }
 
+/* v5.50: Hide ExtJS shadow element - use pure CSS shadow on window instead */
 .x-css-shadow {
-    box-shadow: rgba(0, 0, 0, 0.6) 0 4px 20px !important;
+    display: none !important;
 }
 
 /* =====================================================
@@ -1026,6 +1027,11 @@ td.x-grid-cell {
     border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
 }
 
+/* v5.53: Vertically center text in grid table cells */
+.x-grid-cell {
+    vertical-align: middle !important;
+}
+
 /* Keep rows themselves flat; separators handled above */
 .x-grid-item {
     box-shadow: none !important;
@@ -1327,6 +1333,21 @@ div[id^="pveResourceTree-"][id$="-body"] {
    Only targets containers with VISIBLE progress bars (excludes Status/HA State/Node/Unprivileged) */
 .x-container[id^="pmxInfoWidget"].x-box-layout-ct:has(.x-progress:not([style*="display: none"]):not([style*="display:none"])) {
     padding: 5px 25px !important;
+}
+
+/* v5.51: Fix horizontal padding alignment for rows with HIDDEN progress bars
+   (Load average, KSM sharing, CPU(s), Kernel Version, Boot Mode, Manager Version)
+   Only adjusts horizontal padding to match visible progress bar rows, keeps vertical minimal */
+.x-container[id^="pmxInfoWidget"].x-box-layout-ct:has(.x-progress[style*="display: none"]),
+.x-container[id^="pmxInfoWidget"].x-box-layout-ct:has(.x-progress[style*="display:none"]) {
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+}
+
+/* v5.51: Repository Status row uses different ID pattern */
+.x-container[id^="pmxNodeInfoRepoStatus"].x-box-layout-ct {
+    padding-left: 25px !important;
+    padding-right: 25px !important;
 }
 
 /* v5.22: Removed height:inherit - only min-height:auto is needed */
@@ -1644,11 +1665,12 @@ div[id^="pveResourceTree-"][id$="-body"] {
 /* =====================================================
    WINDOWS / DIALOGS (UniFi authentic)
    ===================================================== */
+/* v5.50: Reduced shadow intensity for cleaner look */
 .x-window-default {
     background-color: #131416;
     border: 1px solid #34383D;
     border-radius: 8px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
 }
 
 .x-window-header-default {
@@ -1755,6 +1777,62 @@ div[id^="pveResourceTree-"][id$="-body"] {
     left: auto !important;
     top: auto !important;
     margin: 0 !important;
+}
+
+/* =====================================================
+   v5.49: LOGIN MODAL / DIALOG FORM FIXES
+   - Form fields stretch to full width (override inline 380px)
+   - Footer checkbox/button gap fixed (was -7px overlap)
+   - Footer toolbar takes full width (override inline 374px)
+   ===================================================== */
+
+/* Override inline width on window form panel body */
+.x-window .x-panel-body {
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+}
+
+/* Ensure form containers use full width */
+.x-window .x-autocontainer-outerCt {
+    width: 100% !important;
+}
+
+/* Footer toolbar - take full width with right padding */
+.x-window .x-toolbar-footer {
+    width: 100% !important;
+    padding-right: 10px !important;
+    box-sizing: border-box !important;
+}
+
+.x-window .x-toolbar-footer .x-box-inner {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 12px !important;
+    width: 100% !important;
+}
+
+.x-window .x-toolbar-footer .x-box-target {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 12px !important;
+    width: 100% !important;
+}
+
+/* Remove absolute positioning from footer items */
+.x-window .x-toolbar-footer .x-form-type-checkbox,
+.x-window .x-toolbar-footer .x-btn {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    margin: 0 !important;
+}
+
+/* Auto-width for checkbox label in footer */
+.x-window .x-toolbar-footer .x-form-type-checkbox .x-form-item-label {
+    width: auto !important;
 }
 
 /* =====================================================
@@ -1912,6 +1990,18 @@ span.proxmox-tag-light {
     padding: 2px 8px !important;
     display: inline-flex !important;
     align-items: center !important;
+}
+
+/* v5.52: Make resource tree tags match search table tag height (19px) */
+.x-tree-node-text .proxmox-tag-dark,
+.x-tree-node-text .proxmox-tag-light {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+
+/* v5.52: Force tree row height to stay at 25px when tags have reduced padding */
+.x-tree-panel .x-grid-row {
+    height: 25px !important;
 }
 
 /* Pencil button for editing tags */
@@ -2776,6 +2866,18 @@ div[class*="gauge"] {
    v5.9 FIX: Consistent 4px border-radius on treelist items (UniFi-style)
    Note: Treelist hover/selected now handled by ::before pseudo-element
    ===================================================== */
+
+/* v5.54: Force 4px border-radius on treelist items and containers
+   (overrides default 8px from widget-toolkit) */
+.x-treelist-item-wrap,
+.x-treelist-item-text,
+.x-treelist-row,
+.x-treelist-container,
+.x-treelist-root-container,
+.x-treelist,
+.x-treelist-pve-nav {
+    border-radius: 4px !important;
+}
 
 /* Resource tree selections - consistent 8px */
 .x-grid-item-selected,
