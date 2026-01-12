@@ -1,6 +1,6 @@
 #!/bin/bash
 # ProxMorph Theme Collection Installer for Proxmox VE
-# Version: 2.0
+# Version: 2.1
 # Supports: PVE 8.x, 9.x
 # Integrates with native Proxmox theme selector
 
@@ -21,11 +21,13 @@ WIDGET_TOOLKIT_DIR="/usr/share/javascript/proxmox-widget-toolkit"
 THEMES_DIR="${WIDGET_TOOLKIT_DIR}/themes"
 PROXMOXLIB_JS="${WIDGET_TOOLKIT_DIR}/proxmoxlib.js"
 BACKUP_DIR="/root/.proxmorph-backup"
+GITHUB_REPO="IT-BAER/proxmorph"
+INSTALL_DIR="/opt/proxmorph"
 
 echo -e "${CYAN}"
 echo "╔═══════════════════════════════════════════════════════════╗"
 echo "║        ProxMorph Theme Collection for Proxmox VE          ║"
-echo "║                     Version 2.0                           ║"
+echo "║                     Version 2.1                           ║"
 echo "╚═══════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 
@@ -52,6 +54,70 @@ check_pve() {
     fi
     PVE_VERSION=$(pveversion --verbose | head -1)
     print_info "Detected: $PVE_VERSION"
+}
+
+# Get latest release version from GitHub
+get_latest_version() {
+    curl -s "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | \
+        grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/'
+}
+
+# Download and extract release from GitHub
+download_release() {
+    local version="${1:-$(get_latest_version)}"
+    
+    if [[ -z "$version" ]]; then
+        print_error "Could not determine latest version"
+        exit 1
+    fi
+    
+    print_info "Downloading ProxMorph v${version}..."
+    
+    local download_url="https://github.com/${GITHUB_REPO}/releases/download/v${version}/proxmorph-${version}.tar.gz"
+    local tmp_dir=$(mktemp -d)
+    
+    if ! curl -sL "$download_url" -o "${tmp_dir}/proxmorph.tar.gz"; then
+        print_error "Failed to download release v${version}"
+        rm -rf "$tmp_dir"
+        exit 1
+    fi
+    
+    # Extract to install directory
+    mkdir -p "$INSTALL_DIR"
+    rm -rf "${INSTALL_DIR:?}"/*
+    tar -xzf "${tmp_dir}/proxmorph.tar.gz" -C "$INSTALL_DIR"
+    rm -rf "$tmp_dir"
+    
+    # Save version info
+    echo "$version" > "${INSTALL_DIR}/.version"
+    
+    print_status "Downloaded ProxMorph v${version}"
+}
+
+# Check for updates
+check_updates() {
+    local current_version=""
+    if [[ -f "${INSTALL_DIR}/.version" ]]; then
+        current_version=$(cat "${INSTALL_DIR}/.version")
+    fi
+    
+    local latest_version=$(get_latest_version)
+    
+    if [[ -z "$latest_version" ]]; then
+        print_warning "Could not check for updates (no internet?)"
+        return 1
+    fi
+    
+    if [[ "$current_version" == "$latest_version" ]]; then
+        print_status "Already on latest version (v${current_version})"
+        return 0
+    elif [[ -n "$current_version" ]]; then
+        print_info "Update available: v${current_version} → v${latest_version}"
+        return 2
+    else
+        print_info "Latest version: v${latest_version}"
+        return 2
+    fi
 }
 
 # Create backup of original files
@@ -116,12 +182,17 @@ patch_theme_map() {
 install_themes() {
     print_info "Installing ProxMorph themes..."
     
-    # Find script directory
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    THEMES_SOURCE="${SCRIPT_DIR}/themes"
+    # Find themes source - prefer INSTALL_DIR if it exists, otherwise use script dir
+    if [[ -d "${INSTALL_DIR}/themes" ]]; then
+        THEMES_SOURCE="${INSTALL_DIR}/themes"
+    else
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        THEMES_SOURCE="${SCRIPT_DIR}/themes"
+    fi
     
     if [[ ! -d "$THEMES_SOURCE" ]]; then
         print_error "Themes directory not found: $THEMES_SOURCE"
+        print_info "Run with 'update' to download from GitHub releases"
         exit 1
     fi
     
@@ -230,8 +301,13 @@ list_themes() {
     print_info "Available ProxMorph Themes:"
     echo ""
     
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    THEMES_SOURCE="${SCRIPT_DIR}/themes"
+    # Find themes source - prefer INSTALL_DIR if it exists
+    if [[ -d "${INSTALL_DIR}/themes" ]]; then
+        THEMES_SOURCE="${INSTALL_DIR}/themes"
+    else
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        THEMES_SOURCE="${SCRIPT_DIR}/themes"
+    fi
     
     if [[ ! -d "$THEMES_SOURCE" ]]; then
         print_error "Themes directory not found"
@@ -259,8 +335,16 @@ show_status() {
     print_info "ProxMorph Status:"
     echo ""
     
+    # Show installed version
+    if [[ -f "${INSTALL_DIR}/.version" ]]; then
+        local current_ver=$(cat "${INSTALL_DIR}/.version")
+        echo -e "  Version:    ${GREEN}v${current_ver}${NC}"
+    else
+        echo -e "  Version:    ${YELLOW}Unknown (local install)${NC}"
+    fi
+    
     # Check if any ProxMorph themes are registered
-    if grep -q "blue-slate\|proxmorph" "$PROXMOXLIB_JS" 2>/dev/null; then
+    if grep -q "blue-slate\|unifi" "$PROXMOXLIB_JS" 2>/dev/null; then
         echo -e "  Theme Map:  ${GREEN}Patched${NC}"
     else
         echo -e "  Theme Map:  ${YELLOW}Not patched${NC}"
@@ -268,8 +352,14 @@ show_status() {
     
     # Count installed themes
     installed=0
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    for css_file in "${SCRIPT_DIR}/themes"/theme-*.css; do
+    if [[ -d "${INSTALL_DIR}/themes" ]]; then
+        THEMES_SOURCE="${INSTALL_DIR}/themes"
+    else
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        THEMES_SOURCE="${SCRIPT_DIR}/themes"
+    fi
+    
+    for css_file in "${THEMES_SOURCE}"/theme-*.css 2>/dev/null; do
         if [[ -f "${THEMES_DIR}/$(basename "$css_file")" ]]; then
             ((installed++))
         fi
@@ -291,21 +381,23 @@ show_status() {
 show_menu() {
     echo ""
     echo "Select an option:"
-    echo "  1) Install all themes"
-    echo "  2) Reinstall themes (after PVE update)"
-    echo "  3) Uninstall themes"
-    echo "  4) List themes"
-    echo "  5) Show status"
+    echo "  1) Install themes"
+    echo "  2) Update from GitHub (latest release)"
+    echo "  3) Reinstall themes (after PVE update)"
+    echo "  4) Uninstall themes"
+    echo "  5) List themes"
+    echo "  6) Show status"
     echo "  0) Exit"
     echo ""
-    read -p "Enter choice [0-5]: " choice
+    read -p "Enter choice [0-6]: " choice
     
     case $choice in
         1) install_themes ;;
-        2) reinstall_themes ;;
-        3) uninstall_themes ;;
-        4) list_themes ;;
-        5) show_status ;;
+        2) download_release && install_themes ;;
+        3) reinstall_themes ;;
+        4) uninstall_themes ;;
+        5) list_themes ;;
+        6) show_status ;;
         0) exit 0 ;;
         *) print_error "Invalid option" ; show_menu ;;
     esac
@@ -320,6 +412,10 @@ main() {
         install)
             install_themes
             ;;
+        update)
+            download_release "${2:-}"
+            install_themes
+            ;;
         reinstall)
             reinstall_themes
             ;;
@@ -331,6 +427,9 @@ main() {
             ;;
         status)
             show_status
+            ;;
+        check)
+            check_updates
             ;;
         *)
             show_menu
