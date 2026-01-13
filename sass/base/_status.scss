@@ -1,0 +1,37 @@
+// ProxMorph Status Styles
+// VM/Container status icons and progress bars
+
+/* ===== Progress Bars ===== */
+.x-progress-bar {
+  background-color: var(--pm-accent) !important;
+}
+
+.x-progress.critical .x-progress-bar {
+  background-color: var(--pm-error) !important;
+}
+
+.x-progress.warning .x-progress-bar {
+  background-color: var(--pm-warning) !important;
+}
+
+/* ===== Status Icons ===== */
+.x-tree-icon-custom.running:after,
+.x-grid-icon-custom.running:after,
+.x-tree-icon-custom.online:after,
+.x-grid-icon-custom.online:after {
+  color: var(--pm-success) !important;
+}
+
+.x-tree-icon-custom.stopped:after,
+.x-grid-icon-custom.stopped:after,
+.x-tree-icon-custom.error:after,
+.x-grid-icon-custom.error:after {
+  color: var(--pm-error) !important;
+}
+
+.x-tree-icon-custom.paused:after,
+.x-grid-icon-custom.paused:after,
+.x-tree-icon-custom.pending:after,
+.x-grid-icon-custom.pending:after {
+  color: var(--pm-warning) !important;
+}

@@ -1,13 +1,18 @@
 // ProxMorph Theme Base Template
-// Copy this file and modify the variables to create a new theme
-// Compile with: sass theme-name.scss theme-name.css
+// ============================================
+// HOW TO CREATE A NEW THEME:
+// ============================================
+// 1. Copy this file to: sass/themes/theme-yourname.scss
+// 2. Modify the variables below
+// 3. Compile: sass sass/themes/theme-yourname.scss themes/theme-yourname.css --style=expanded
+// 4. Run: ./install.sh install
+// ============================================
 
 // ============================================
-// THEME CONFIGURATION
+// THEME CONFIGURATION - EDIT THESE VALUES
 // ============================================
 
 // Theme Name (shown in Proxmox dropdown)
-// IMPORTANT: First line of compiled CSS must be: /*!Theme Name*/
 $theme-name: "My Theme";
 
 // Primary Accent Color
@@ -36,15 +41,18 @@ $border: #475569;
 $border-subtle: #334155;
 
 // ============================================
-// DO NOT EDIT BELOW (unless customizing)
+// DO NOT EDIT BELOW THIS LINE
 // ============================================
 
-// Import the base styles
+// Theme name comment (REQUIRED - must be first line of output CSS)
+/*!#{$theme-name}*/
+
+// Import all base styles
 @import 'base/variables';
-@import 'base/panels';
+@import 'base/base';
 @import 'base/navigation';
+@import 'base/buttons';
 @import 'base/forms';
 @import 'base/tables';
-@import 'base/buttons';
 @import 'base/status';
 @import 'base/misc';

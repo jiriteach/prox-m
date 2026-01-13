@@ -1,0 +1,30 @@
+// ProxMorph Table/Grid Styles
+
+/* ===== Grid/Tables ===== */
+.x-grid-item {
+  background-color: var(--pm-bg-base) !important;
+  color: var(--pm-text) !important;
+}
+
+.x-grid-item-alt {
+  background-color: var(--pm-bg-surface) !important;
+}
+
+.x-grid-item-over {
+  background-color: var(--pm-bg-elevated) !important;
+}
+
+.x-grid-item-selected {
+  background-color: var(--pm-accent-dark) !important;
+  color: #fff !important;
+}
+
+.x-grid-header-ct,
+.x-column-header {
+  background-color: var(--pm-bg-surface) !important;
+  border-color: var(--pm-border) !important;
+}
+
+.x-column-header-text {
+  color: var(--pm-text-dim) !important;
+}

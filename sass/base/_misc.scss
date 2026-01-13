@@ -1,0 +1,61 @@
+// ProxMorph Miscellaneous Styles
+// Windows, tooltips, scrollbars, etc.
+
+/* ===== Windows ===== */
+.x-window {
+  background-color: var(--pm-bg-base) !important;
+  border-color: var(--pm-border) !important;
+}
+
+/* ===== Splitter ===== */
+.x-splitter {
+  background-color: var(--pm-bg-elevated) !important;
+}
+
+/* ===== Tooltips ===== */
+.x-tip {
+  background-color: var(--pm-bg-elevated) !important;
+  border-color: var(--pm-border) !important;
+  color: var(--pm-text) !important;
+}
+
+/* ===== Masks ===== */
+.x-mask-msg {
+  background-color: var(--pm-bg-surface) !important;
+  border-color: var(--pm-border) !important;
+  color: var(--pm-text) !important;
+}
+
+/* ===== Tools ===== */
+.x-tool {
+  color: var(--pm-text-dim) !important;
+}
+
+.x-tool:hover {
+  color: var(--pm-accent-light) !important;
+}
+
+/* ===== Scrollbars ===== */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--pm-bg-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--pm-border);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--pm-text-muted);
+}
+
+/* ===== Selection ===== */
+::selection {
+  background: var(--pm-accent);
+  color: #fff;
+}

@@ -1,0 +1,47 @@
+// ProxMorph Theme: Emerald Night
+// A dark theme with green/emerald accents
+
+// ============================================
+// THEME CONFIGURATION
+// ============================================
+
+$theme-name: "Emerald Night";
+
+// Primary Accent Color (Emerald)
+$accent: #10b981;
+$accent-light: #34d399;
+$accent-dark: #059669;
+
+// Status Colors
+$success: #10b981;
+$warning: #f59e0b;
+$error: #ef4444;
+$info: #06b6d4;
+
+// Background Colors (Neutral dark)
+$bg-base: #111827;
+$bg-surface: #1f2937;
+$bg-elevated: #374151;
+
+// Text Colors
+$text-primary: #f9fafb;
+$text-secondary: #d1d5db;
+$text-muted: #9ca3af;
+
+// Border Colors
+$border: #4b5563;
+$border-subtle: #374151;
+
+// ============================================
+// Build theme
+// ============================================
+/*!#{$theme-name}*/
+
+@import '../base/variables';
+@import '../base/base';
+@import '../base/navigation';
+@import '../base/buttons';
+@import '../base/forms';
+@import '../base/tables';
+@import '../base/status';
+@import '../base/misc';
