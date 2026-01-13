@@ -1,6 +1,5 @@
 #!/bin/bash
 # ProxMorph Theme Collection Installer for Proxmox VE
-# Version: 2.1
 # Supports: PVE 8.x, 9.x
 # Integrates with native Proxmox theme selector
 
@@ -27,7 +26,6 @@ INSTALL_DIR="/opt/proxmorph"
 echo -e "${CYAN}"
 echo "╔═══════════════════════════════════════════════════════════╗"
 echo "║        ProxMorph Theme Collection for Proxmox VE          ║"
-echo "║                     Version 2.1                           ║"
 echo "╚═══════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 
@@ -359,7 +357,7 @@ show_status() {
         THEMES_SOURCE="${SCRIPT_DIR}/themes"
     fi
     
-    for css_file in "${THEMES_SOURCE}"/theme-*.css 2>/dev/null; do
+    for css_file in "${THEMES_SOURCE}"/theme-*.css; do
         if [[ -f "${THEMES_DIR}/$(basename "$css_file")" ]]; then
             ((installed++))
         fi
