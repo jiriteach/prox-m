@@ -5,6 +5,22 @@ All notable changes to ProxMorph will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-01-13
+
+### Changed
+- **BREAKING**: Removed SASS build system in favor of direct CSS patching
+- Theme creation now uses PowerShell scripts that patch the original Proxmox CSS
+- GitHub Dark theme completely rewritten using official GitHub CSS variables
+
+### Added
+- `generate_github_dark.ps1` - PowerShell script to generate GitHub Dark theme
+- `themes/original-proxmox-dark.css` - Base Proxmox Dark CSS for patching
+
+### Removed
+- SASS source files (`sass/` directory)
+- `build.sh` - No longer needed
+- Emerald Night theme (deprecated)
+
 ## [1.1.1] - 2025-01-12
 
 ### Fixed

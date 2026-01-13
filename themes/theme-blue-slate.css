@@ -1,51 +1,48 @@
 /*!Blue Slate*/
-/* --------------------------------------------------------------------
-   ProxMorph Theme: Blue Slate
-   Part of the ProxMorph Theme Collection for Proxmox VE
-   
-   A clean, modern dark theme with blue accents.
-   Based on Tailwind CSS Slate color palette.
-   
-   Author: ProxMorph Project
-   Version: 1.0
-   Tested on: PVE 8.x, 9.x
-   --------------------------------------------------------------------*/
-
-/* ===== Color Variables ===== */
 :root {
-  /* Primary Accent */
   --pm-accent: #3b82f6;
   --pm-accent-light: #60a5fa;
   --pm-accent-dark: #2563eb;
-  
-  /* Status Colors */
   --pm-success: #10b981;
   --pm-warning: #f59e0b;
   --pm-error: #ef4444;
   --pm-info: #06b6d4;
-  
-  /* Backgrounds (Slate palette) */
   --pm-bg-base: #0f172a;
   --pm-bg-surface: #1e293b;
   --pm-bg-elevated: #334155;
-  
-  /* Text */
   --pm-text: #f1f5f9;
   --pm-text-dim: #cbd5e1;
   --pm-text-muted: #94a3b8;
-  
-  /* Borders */
   --pm-border: #475569;
   --pm-border-subtle: #334155;
+  --pwt-panel-background: var(--pm-bg-base);
+  --pwt-text-color: var(--pm-text-dim);
+  --pwt-gauge-default: var(--pm-accent);
+  --pwt-gauge-back: var(--pm-bg-elevated);
+  --pwt-gauge-warn: var(--pm-warning);
+  --pwt-gauge-crit: var(--pm-error);
+  --pwt-chart-primary: var(--pm-success);
+  --pwt-chart-grid-stroke: var(--pm-border);
+  color-scheme: dark;
 }
 
 /* ===== Base ===== */
-body {
+body,
+.x-body {
   background-color: var(--pm-bg-base) !important;
   color: var(--pm-text) !important;
 }
 
-/* ===== Panels ===== */
+.x-viewport > .x-body {
+  background-color: var(--pm-bg-base) !important;
+}
+
+body.x-border-layout-ct,
+div.x-border-layout-ct {
+  background-color: var(--pm-bg-base) !important;
+}
+
+/* ===== Panels - with GitHub-style rounded corners ===== */
 .x-panel,
 .x-panel-body,
 .x-panel-body-default,
@@ -54,12 +51,22 @@ body {
   background-color: var(--pm-bg-base) !important;
   color: var(--pm-text) !important;
   border-color: var(--pm-border-subtle) !important;
+  border-radius: 6px !important;
+}
+
+.x-panel-default {
+  border-radius: 6px !important;
+  overflow: hidden !important;
+}
+
+.x-window {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* ===== Headers ===== */
 .x-toolbar,
-.x-tab-bar,
-.x-tab-bar-default,
 .x-panel-header,
 .x-panel-header-default,
 .x-window-header,
@@ -68,37 +75,263 @@ body {
   border-color: var(--pm-border) !important;
 }
 
+.x-panel-header-default {
+  border-radius: 6px 6px 0 0 !important;
+}
+
+.x-window-header-default {
+  border-radius: 12px 12px 0 0 !important;
+}
+
+.x-toolbar-default {
+  background-color: var(--pm-bg-base) !important;
+  border: none !important;
+}
+
+.x-toolbar-default.x-docked-top {
+  border: none !important;
+  border-bottom: 1px solid var(--pm-border) !important;
+}
+
+.x-toolbar-separator {
+  border-color: var(--pm-border) !important;
+}
+
+.x-toolbar-text-default {
+  color: var(--pm-text-dim) !important;
+}
+
 .x-panel-header-title,
 .x-panel-header-title-default,
 .x-window-header-title-default {
   color: var(--pm-text) !important;
 }
 
+/* ===== Masks & Overlays ===== */
+.x-mask {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.x-css-shadow {
+  display: none !important;
+}
+
+/* ===== Tab Bar - with GitHub-style rounded corners ===== */
+.x-tab-bar,
+.x-tab-bar-default {
+  background-color: var(--pm-bg-base) !important;
+  border: none !important;
+}
+
 /* ===== Tabs ===== */
 .x-tab,
 .x-tab-default {
-  background-color: var(--pm-bg-surface) !important;
-  border-color: var(--pm-border) !important;
+  background-color: var(--pm-bg-base) !important;
+  border: none !important;
   color: var(--pm-text-dim) !important;
+  border-radius: 6px 6px 0 0 !important;
+  margin-right: 2px !important;
+}
+
+.x-tab-default-top {
+  background-color: var(--pm-bg-base) !important;
+  border: none !important;
+  border-radius: 6px 6px 0 0 !important;
+}
+
+.x-tab-default.x-tab-over {
+  background-color: var(--pm-bg-elevated) !important;
+  border: none !important;
 }
 
 .x-tab-active,
-.x-tab.x-tab-active {
-  background-color: var(--pm-bg-base) !important;
-  border-bottom-color: var(--pm-accent) !important;
+.x-tab.x-tab-active,
+.x-tab-default.x-tab.x-tab-active {
+  background-color: var(--pm-accent) !important;
+  border: none !important;
+  border-radius: 6px 6px 0 0 !important;
+}
+
+.x-tab-inner-default {
+  color: var(--pm-text-dim) !important;
 }
 
 .x-tab-active .x-tab-inner,
-.x-tab.x-tab-active .x-tab-inner-default {
+.x-tab.x-tab-active .x-tab-inner-default,
+.x-tab-active .x-tab-inner-default {
+  color: #fff !important;
+}
+
+.x-tab-default.x-tab-disabled {
+  background-color: transparent !important;
+  border: none !important;
+  color: var(--pm-text-muted) !important;
+}
+
+/* ===== Navigation Tree Container ===== */
+.x-treelist-pve-nav {
+  background-color: var(--pm-bg-base) !important;
+  border: none !important;
+}
+
+.x-treelist-item,
+.x-treelist-item-tool {
+  background-color: var(--pm-bg-base) !important;
+  border-radius: 4px !important;
+}
+
+/* ===== Tree List Row Styling ===== */
+.x-treelist-row,
+.x-tree-cell,
+.x-grid-cell-treecolumn {
+  padding: 0px 8px !important;
+}
+
+.x-treelist-item-text,
+.x-treelist-item-icon {
+  color: var(--pm-text) !important;
+}
+
+/* Remove all default background styles */
+.x-treelist-row,
+.x-treelist-row:hover,
+.x-treelist-row-over,
+.x-treelist-item-selected > .x-treelist-row,
+.x-treelist-item-selected > .x-treelist-row:hover,
+.x-treelist-item-expanded > .x-treelist-row,
+.x-treelist-item-expanded > .x-treelist-row-over,
+.x-treelist-item-expandable > .x-treelist-row,
+.x-treelist-item-expandable > .x-treelist-row-over {
+  background: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border-left: none !important;
+  position: relative !important;
+  z-index: 1 !important;
+  border-radius: 4px !important;
+}
+
+/* Pseudo-element for background effects */
+.x-treelist-row::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  opacity: 0 !important;
+  transform: scale(0.95) !important;
+  transition: opacity 0.15s ease, transform 0.15s ease !important;
+  z-index: -1 !important;
+  pointer-events: none !important;
+}
+
+/* Hover state */
+.x-treelist-row:hover::before {
+  background: var(--pm-bg-elevated) !important;
+  opacity: 0.5 !important;
+  transform: scale(1) !important;
+}
+
+/* Disable x-treelist-row-over class effect */
+.x-treelist-row-over::before {
+  opacity: 0 !important;
+}
+
+/* Show hover effect when directly hovered */
+.x-treelist-row-over:hover::before {
+  background: var(--pm-bg-elevated) !important;
+  opacity: 0.5 !important;
+  transform: scale(1) !important;
+}
+
+/* Selected state background */
+.x-treelist-item-selected > .x-treelist-row::before {
+  background: var(--pm-bg-elevated) !important;
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+
+/* Selected + hover */
+.x-treelist-item-selected > .x-treelist-row:hover::before {
+  background: var(--pm-bg-surface) !important;
+  opacity: 1 !important;
+}
+
+/* Selected item text - accent color */
+.x-treelist-item-selected > .x-treelist-row .x-treelist-item-text {
   color: var(--pm-accent-light) !important;
 }
 
-/* ===== Buttons ===== */
+/* Selected item icon - accent color */
+.x-treelist-item-selected > .x-treelist-row .x-treelist-item-icon {
+  color: var(--pm-accent-light) !important;
+}
+
+/* Parent item containing selected child */
+.x-treelist-item:has(.x-treelist-item-selected) > .x-treelist-row .x-treelist-item-text {
+  color: var(--pm-text) !important;
+}
+
+.x-treelist-item:has(.x-treelist-item-selected) > .x-treelist-row .x-treelist-item-icon {
+  color: var(--pm-text) !important;
+}
+
+/* ===== Left Panel Tree (Server list) ===== */
+.x-grid-tree-node-leaf,
+.x-grid-tree-node-collapsed,
+.x-grid-tree-node-expanded {
+  background-color: var(--pm-bg-base) !important;
+}
+
+/* Tree grid rows */
+.x-tree-panel,
+.x-panel.x-tree-panel {
+  background-color: var(--pm-bg-base) !important;
+}
+
+.x-tree-panel .x-grid-view,
+.x-tree-panel .x-grid-item,
+.x-tree-panel .x-grid-row {
+  background-color: var(--pm-bg-base) !important;
+  color: var(--pm-text) !important;
+}
+
+.x-tree-panel .x-grid-item-selected,
+.x-tree-panel .x-grid-row-selected {
+  background-color: var(--pm-bg-elevated) !important;
+}
+
+.x-tree-panel .x-grid-item-selected .x-grid-cell,
+.x-tree-panel .x-grid-row-selected .x-grid-cell {
+  background-color: var(--pm-bg-elevated) !important;
+  color: var(--pm-accent-light) !important;
+}
+
+.x-tree-panel .x-grid-item-over,
+.x-tree-panel .x-grid-row-over {
+  background-color: var(--pm-bg-surface) !important;
+}
+
+/* Tree icons */
+.x-tree-icon-custom,
+.x-grid-icon-custom {
+  color: var(--pm-text-dim) !important;
+}
+
+/* ===== Buttons - with GitHub-style rounded corners ===== */
 .x-btn,
 .x-btn-default-small,
 .x-btn-default-toolbar-small {
   background-color: var(--pm-bg-surface) !important;
   border-color: var(--pm-border) !important;
+  border-radius: 6px !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease !important;
 }
 
 .x-btn-inner,
@@ -110,6 +343,7 @@ body {
 .x-btn:hover,
 .x-btn-over {
   background-color: var(--pm-bg-elevated) !important;
+  border-color: var(--pm-border) !important;
 }
 
 .x-btn:hover .x-btn-inner {
@@ -125,32 +359,144 @@ body {
   color: #fff !important;
 }
 
-/* ===== Navigation Tree ===== */
-.x-treelist-pve-nav {
+.x-btn-primary,
+.x-btn-default-toolbar-small.x-btn-focus {
+  background-color: var(--pm-accent) !important;
+  border-color: var(--pm-accent) !important;
+  border-radius: 6px !important;
+}
+
+.x-btn-primary .x-btn-inner {
+  color: #fff !important;
+}
+
+/* ===== Forms - with GitHub-style rounded corners ===== */
+.x-form-text,
+.x-form-field,
+.x-form-trigger-wrap {
+  background-color: var(--pm-bg-elevated) !important;
+  border-color: var(--pm-border) !important;
+  color: var(--pm-text) !important;
+  border-radius: 6px !important;
+}
+
+.x-form-text-default,
+.x-form-trigger-wrap-default {
+  background-color: var(--pm-bg-elevated) !important;
+  border-color: var(--pm-border) !important;
+  border-radius: 6px !important;
+}
+
+.x-form-text:focus,
+.x-form-field:focus {
+  border-color: var(--pm-accent) !important;
+  box-shadow: 0 0 0 2px rgba(47, 129, 247, 0.25) !important;
+}
+
+.x-form-item-label {
+  color: var(--pm-text-dim) !important;
+}
+
+/* Form trigger button (dropdown arrow) */
+.x-form-trigger,
+.x-form-trigger-default,
+.x-form-arrow-trigger,
+.x-form-arrow-trigger-default {
+  background-color: var(--pm-bg-elevated) !important;
+  border-color: var(--pm-border) !important;
+  border-radius: 0 6px 6px 0 !important;
+}
+
+/* Combobox styling */
+.x-form-type-combo .x-form-trigger-wrap,
+.x-form-type-combo .x-form-text-wrap {
+  background-color: var(--pm-bg-elevated) !important;
+  border-radius: 6px !important;
+}
+
+/* ===== Menus ===== */
+.x-menu,
+.x-menu-default {
+  background-color: var(--pm-bg-surface) !important;
+  border: 1px solid var(--pm-border) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+.x-menu-body,
+.x-menu-body-default {
   background-color: var(--pm-bg-surface) !important;
 }
 
-.x-treelist-item-text,
-.x-treelist-item-icon {
+.x-menu-item,
+.x-menu-item-default {
   color: var(--pm-text) !important;
 }
 
-.x-treelist-row-over {
+.x-menu-item-active,
+.x-menu-item-default.x-menu-item-active,
+.x-menu-item-default.x-menu-item-focus {
+  background-color: var(--pm-bg-elevated) !important;
+  color: var(--pm-text) !important;
+}
+
+.x-menu-item-text,
+.x-menu-item-text-default {
+  color: var(--pm-text) !important;
+}
+
+.x-menu-item-link,
+.x-menu-item-link-default {
+  background-color: transparent !important;
+}
+
+.x-menu-item-link:hover,
+.x-menu-item-link-default:hover {
   background-color: var(--pm-bg-elevated) !important;
 }
 
-.x-treelist-row-over .x-treelist-item-text,
-.x-treelist-row-over .x-treelist-item-icon {
-  color: var(--pm-accent-light) !important;
+.x-menu-item-icon,
+.x-menu-item-icon-default {
+  color: var(--pm-text-dim) !important;
 }
 
-.x-treelist-item-selected,
-.x-treelist-item-selected > .x-treelist-row {
+.x-menu-item-separator,
+.x-menu-item-default.x-menu-item-separator {
+  background-color: var(--pm-bg-surface) !important;
+  border-color: var(--pm-border) !important;
+}
+
+.x-menu-icon-separator,
+.x-menu-icon-separator-default {
+  background-color: transparent !important;
+  border-color: var(--pm-border) !important;
+}
+
+/* ===== Boundlist (Dropdowns) ===== */
+.x-boundlist,
+.x-boundlist-default {
+  background-color: var(--pm-bg-surface) !important;
+  border: 1px solid var(--pm-border) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+.x-boundlist-list-ct {
+  background-color: var(--pm-bg-surface) !important;
+}
+
+.x-boundlist-item {
+  color: var(--pm-text) !important;
+  background-color: var(--pm-bg-surface) !important;
+}
+
+.x-boundlist-item-over {
+  background-color: var(--pm-bg-elevated) !important;
+  color: var(--pm-text) !important;
+}
+
+.x-boundlist-selected {
   background-color: var(--pm-accent-dark) !important;
-}
-
-.x-treelist-item-selected .x-treelist-item-text,
-.x-treelist-item-selected .x-treelist-item-icon {
   color: #fff !important;
 }
 
@@ -158,73 +504,118 @@ body {
 .x-grid-item {
   background-color: var(--pm-bg-base) !important;
   color: var(--pm-text) !important;
+  border-bottom: 1px solid rgba(48, 54, 61, 0.3) !important;
 }
 
 .x-grid-item-alt {
-  background-color: var(--pm-bg-surface) !important;
+  background-color: rgba(22, 27, 34, 0.5) !important;
 }
 
 .x-grid-item-over {
-  background-color: var(--pm-bg-elevated) !important;
+  background-color: rgba(33, 38, 45, 0.8) !important;
 }
 
 .x-grid-item-selected {
-  background-color: var(--pm-accent-dark) !important;
+  background-color: rgba(31, 111, 235, 0.3) !important;
   color: #fff !important;
 }
 
-.x-grid-header-ct,
+.x-grid-cell {
+  border-color: transparent !important;
+}
+
+.x-grid-cell-inner {
+  border-color: transparent !important;
+}
+
+.x-grid-row {
+  border-bottom: 1px solid rgba(48, 54, 61, 0.2) !important;
+}
+
+.x-grid-view,
+.x-grid-table {
+  border-collapse: separate !important;
+}
+
+.x-grid-header-ct {
+  border: solid 1px var(--pm-border) !important;
+  background-color: var(--pm-bg-surface) !important;
+  background-image: none !important;
+  background: var(--pm-bg-surface) !important;
+}
+
 .x-column-header {
-  background-color: var(--pm-bg-surface) !important;
   border-color: var(--pm-border) !important;
 }
 
-.x-column-header-text {
-  color: var(--pm-text-dim) !important;
-}
-
-/* ===== Forms ===== */
-.x-form-text,
-.x-form-field,
-.x-form-trigger-wrap {
-  background-color: var(--pm-bg-elevated) !important;
-  border-color: var(--pm-border) !important;
+.x-grid-item,
+.x-column-header-default,
+.x-grid-cell-row-numberer {
   color: var(--pm-text) !important;
-}
-
-.x-form-text:focus,
-.x-form-field:focus {
-  border-color: var(--pm-accent) !important;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25) !important;
-}
-
-.x-form-item-label {
-  color: var(--pm-text-dim) !important;
-}
-
-/* ===== Menus ===== */
-.x-menu {
-  background-color: var(--pm-bg-surface) !important;
-  border-color: var(--pm-border) !important;
-}
-
-.x-menu-item {
-  color: var(--pm-text) !important;
-}
-
-.x-menu-item-active {
-  background-color: var(--pm-bg-elevated) !important;
-}
-
-/* ===== Windows ===== */
-.x-window {
   background-color: var(--pm-bg-base) !important;
+}
+
+.x-grid-header-ct,
+.x-column-header,
+.x-column-header-default,
+.x-column-header-inner,
+.x-column-header-trigger {
+  background-color: var(--pm-bg-surface) !important;
+  background-image: none !important;
   border-color: var(--pm-border) !important;
 }
 
-/* ===== Splitter ===== */
-.x-splitter {
+.x-column-header-inner-empty,
+.x-column-header-el {
+  background-color: var(--pm-bg-surface) !important;
+  background-image: none !important;
+}
+
+[class*=x-column-header] {
+  background-color: var(--pm-bg-surface) !important;
+  background-image: none !important;
+  color: var(--pm-text-dim) !important;
+}
+
+.x-column-header-text,
+.x-column-header-text-inner {
+  color: var(--pm-text-dim) !important;
+}
+
+.x-column-header-trigger {
+  border-color: var(--pm-border-dim) !important;
+}
+
+.x-column-header-over,
+.x-column-header-open,
+.x-column-header-last .x-column-header-over .x-column-header-trigger {
   background-color: var(--pm-bg-elevated) !important;
+}
+
+.x-column-header-sort-ASC,
+.x-column-header-sort-DESC {
+  background-color: rgba(47, 129, 247, 0.15) !important;
+}
+
+.x-grid-header-ct-docked-top,
+.x-grid-header-ct-docked-bottom {
+  background-color: var(--pm-bg-surface) !important;
+  background-image: none !important;
+  border-color: var(--pm-border) !important;
+}
+
+.x-grid-body {
+  border-radius: 6px !important;
+  overflow: hidden !important;
+}
+
+.x-panel-body {
+  border-radius: 6px !important;
+}
+
+.x-grid {
+  border-radius: 6px !important;
+  overflow: hidden !important;
 }
 
 /* ===== Progress Bars ===== */
@@ -262,10 +653,37 @@ body {
   color: var(--pm-warning) !important;
 }
 
-/* ===== Tooltips ===== */
-.x-tip {
-  background-color: var(--pm-bg-elevated) !important;
+/* ===== Proxmox Logo - Invert for dark theme ===== */
+img[id^=proxmoxlogo-][id$=-img] {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+
+img[id^=proxmoxLogoSvg-][id$=-img] {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* ===== Windows ===== */
+.x-window {
+  background-color: var(--pm-bg-base) !important;
   border-color: var(--pm-border) !important;
+}
+
+/* ===== Splitter ===== */
+.x-splitter {
+  background-color: var(--pm-bg-elevated) !important;
+}
+
+/* ===== Tooltips ===== */
+.x-tip,
+.x-tip-default {
+  background-color: var(--pm-bg-elevated) !important;
+  border: 1px solid var(--pm-border) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+.x-tip-body,
+.x-tip-body-default {
   color: var(--pm-text) !important;
 }
 
@@ -283,25 +701,6 @@ body {
 
 .x-tool:hover {
   color: var(--pm-accent-light) !important;
-}
-
-/* ===== Boundlist (Dropdowns) ===== */
-.x-boundlist {
-  background-color: var(--pm-bg-surface) !important;
-  border-color: var(--pm-border) !important;
-}
-
-.x-boundlist-item {
-  color: var(--pm-text) !important;
-}
-
-.x-boundlist-item-over {
-  background-color: var(--pm-bg-elevated) !important;
-}
-
-.x-boundlist-selected {
-  background-color: var(--pm-accent-dark) !important;
-  color: #fff !important;
 }
 
 /* ===== Scrollbars ===== */
@@ -329,4 +728,149 @@ body {
   color: #fff;
 }
 
-/* End of Blue Slate Theme */
+/* ===== Icons - Invert for dark mode ===== */
+/* General icons - set color for dark theme */
+.fa-database::before,
+.fa-tags::before,
+.fa-file-o::before,
+.fa-building::before,
+.x-action-col-icon::before,
+.fa-shield::before,
+.fa-file-text-o::before,
+.fa-clock-o::before,
+.x-tab-icon-el-default,
+.pve-icon-verify-lettering::after,
+.x-tree-icon-custom.lock-migrate::after,
+.x-grid-icon-custom.lock-migrate::after,
+.x-tree-icon-leaf:not(.x-tree-icon-custom)::before,
+.x-tree-icon-parent:not(.x-tree-icon-custom)::before,
+.x-tree-icon-parent-expanded:not(.x-tree-icon-custom)::before,
+.x-grid-filters-filtered-column .x-column-header-text::after {
+  color: var(--pm-text-dim) !important;
+}
+
+/* Tree icons - invert for dark mode */
+.x-tree-expander,
+.x-tree-elbow-img,
+.x-tree-icon-leaf:not(.x-tree-icon-custom),
+.x-tree-icon-parent:not(.x-tree-icon-custom),
+.x-tree-icon-parent-expanded:not(.x-tree-icon-custom) {
+  filter: invert(90%) !important;
+}
+
+/* Navigation icons that need inversion */
+.fa-ceph::before,
+.fa-sdn::before,
+.fa-network-wired::before,
+.pve-itype-treelist-item-icon-cdrom,
+.fa-chevron-right::before,
+.x-grid-row-console,
+.x-box-scroller-toolbar-default.x-box-scroller,
+.pve-itype-icon-qemu,
+.x-tree-node-computer,
+.x-grid-tree-node-expanded .x-tree-node-computer,
+.pbs-icon-tape,
+.pbs-icon-tape-drive {
+  filter: invert(90%) !important;
+}
+
+/* Hardware icons - invert for dark mode */
+.pve-itype-icon-cpu,
+.pve-itype-icon-cdrom,
+.pve-itype-icon-memory,
+.pve-itype-icon-pci,
+.pve-itype-icon-serial,
+.pve-itype-icon-die,
+.pmx-itype-icon-processor,
+.pmx-itype-icon-memory,
+.pve-itype-icon-storage,
+.x-tree-node-harddisk,
+.x-grid-tree-node-expanded .x-tree-node-harddisk {
+  filter: invert(90%) !important;
+}
+
+/* VM/CT icons - neutral color */
+.x-tree-icon-custom,
+.x-grid-icon-custom {
+  color: var(--pm-text-dim) !important;
+}
+
+.x-tree-icon-custom::after,
+.x-grid-icon-custom::after {
+  color: var(--pm-text-dim) !important;
+  text-shadow: none !important;
+}
+
+/* Running VMs/CTs */
+.x-tree-icon-custom.running,
+.x-grid-icon-custom.running {
+  color: var(--pm-text-dim) !important;
+}
+
+/* Stopped VMs/CTs */
+.x-tree-icon-custom.stopped,
+.x-tree-icon-custom.offline,
+.x-grid-icon-custom.stopped,
+.x-grid-icon-custom.offline {
+  color: var(--pm-text-muted) !important;
+}
+
+/* ===== Tree Expander Arrows ===== */
+/* Replace sprite with FontAwesome chevron */
+.x-tree-expander {
+  background-image: none !important;
+  position: relative !important;
+  width: 18px !important;
+  height: 18px !important;
+  margin-right: 4px !important;
+  vertical-align: middle !important;
+}
+
+.x-tree-expander::before {
+  content: "\f054" !important; /* FA chevron-right */
+  font-family: "FontAwesome" !important;
+  font-size: 11px !important;
+  color: var(--pm-text-muted) !important;
+  position: absolute !important;
+  top: -2px !important;
+  left: 3px !important;
+  transition: transform 0.2s ease, color 0.15s ease !important;
+}
+
+.x-grid-tree-node-expanded .x-tree-expander::before {
+  transform: rotate(90deg) !important;
+  color: var(--pm-text-dim) !important;
+}
+
+tr:not(.x-grid-tree-node-expanded) .x-tree-expander::before {
+  transform: rotate(0deg) !important;
+}
+
+.x-tree-expander:hover::before {
+  color: var(--pm-accent) !important;
+}
+
+/* Tree arrows - brightness for older arrow sprites */
+.x-tree-arrows .x-tree-expander {
+  filter: brightness(200%) !important;
+}
+
+/* ===== Treelist Icons (Left Toolbox) ===== */
+/* All treelist icons should have consistent color */
+.x-treelist-item-icon {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* Treelist item icons for LXC/QEMU */
+.x-treelist-item-icon.lxc::after,
+.x-treelist-item-icon.qemu::after {
+  background-color: transparent !important;
+  color: var(--pm-text-dim) !important;
+}
+
+/* ===== Proxmox Specific ===== */
+.proxmox-invalid-row {
+  background-color: rgba(248, 81, 73, 0.15) !important;
+}
+
+/*# sourceMappingURL=theme-blue-slate.css.map */
