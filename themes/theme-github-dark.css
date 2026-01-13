@@ -1,0 +1,308 @@
+/*!GitHub Dark*/
+:root {
+  --pm-accent: #2f81f7;
+  --pm-accent-light: #58a6ff;
+  --pm-accent-dark: #1f6feb;
+  --pm-success: #3fb950;
+  --pm-warning: #d29922;
+  --pm-error: #f85149;
+  --pm-info: #58a6ff;
+  --pm-bg-base: #0d1117;
+  --pm-bg-surface: #161b22;
+  --pm-bg-elevated: #21262d;
+  --pm-text: #e6edf3;
+  --pm-text-dim: #8d96a0;
+  --pm-text-muted: #6e7681;
+  --pm-border: #30363d;
+  --pm-border-subtle: #21262d;
+}
+
+/* ===== Base ===== */
+body {
+  background-color: var(--pm-bg-base) !important;
+  color: var(--pm-text) !important;
+}
+
+/* ===== Panels ===== */
+.x-panel,
+.x-panel-body,
+.x-panel-body-default,
+.x-window-body,
+.x-grid-body {
+  background-color: var(--pm-bg-base) !important;
+  color: var(--pm-text) !important;
+  border-color: var(--pm-border-subtle) !important;
+}
+
+/* ===== Headers ===== */
+.x-toolbar,
+.x-tab-bar,
+.x-tab-bar-default,
+.x-panel-header,
+.x-panel-header-default,
+.x-window-header,
+.x-header {
+  background-color: var(--pm-bg-surface) !important;
+  border-color: var(--pm-border) !important;
+}
+
+.x-panel-header-title,
+.x-panel-header-title-default,
+.x-window-header-title-default {
+  color: var(--pm-text) !important;
+}
+
+/* ===== Tabs ===== */
+.x-tab,
+.x-tab-default {
+  background-color: var(--pm-bg-surface) !important;
+  border-color: var(--pm-border) !important;
+  color: var(--pm-text-dim) !important;
+}
+
+.x-tab-active,
+.x-tab.x-tab-active {
+  background-color: var(--pm-bg-base) !important;
+  border-bottom-color: var(--pm-accent) !important;
+}
+
+.x-tab-active .x-tab-inner,
+.x-tab.x-tab-active .x-tab-inner-default {
+  color: var(--pm-accent-light) !important;
+}
+
+/* ===== Navigation Tree ===== */
+.x-treelist-pve-nav {
+  background-color: var(--pm-bg-surface) !important;
+}
+
+.x-treelist-item-text,
+.x-treelist-item-icon {
+  color: var(--pm-text) !important;
+}
+
+.x-treelist-row-over {
+  background-color: var(--pm-bg-elevated) !important;
+}
+
+.x-treelist-row-over .x-treelist-item-text,
+.x-treelist-row-over .x-treelist-item-icon {
+  color: var(--pm-accent-light) !important;
+}
+
+.x-treelist-item-selected,
+.x-treelist-item-selected > .x-treelist-row {
+  background-color: var(--pm-accent-dark) !important;
+}
+
+.x-treelist-item-selected .x-treelist-item-text,
+.x-treelist-item-selected .x-treelist-item-icon {
+  color: #fff !important;
+}
+
+/* ===== Buttons ===== */
+.x-btn,
+.x-btn-default-small,
+.x-btn-default-toolbar-small {
+  background-color: var(--pm-bg-surface) !important;
+  border-color: var(--pm-border) !important;
+}
+
+.x-btn-inner,
+.x-btn-inner-default-small,
+.x-btn-inner-default-toolbar-small {
+  color: var(--pm-text) !important;
+}
+
+.x-btn:hover,
+.x-btn-over {
+  background-color: var(--pm-bg-elevated) !important;
+}
+
+.x-btn:hover .x-btn-inner {
+  color: var(--pm-accent-light) !important;
+}
+
+.x-btn-pressed {
+  background-color: var(--pm-accent) !important;
+  border-color: var(--pm-accent-dark) !important;
+}
+
+.x-btn-pressed .x-btn-inner {
+  color: #fff !important;
+}
+
+/* ===== Forms ===== */
+.x-form-text,
+.x-form-field,
+.x-form-trigger-wrap {
+  background-color: var(--pm-bg-elevated) !important;
+  border-color: var(--pm-border) !important;
+  color: var(--pm-text) !important;
+}
+
+.x-form-text:focus,
+.x-form-field:focus {
+  border-color: var(--pm-accent) !important;
+  box-shadow: 0 0 0 2px rgba(var(--pm-accent-rgb, 59, 130, 246), 0.25) !important;
+}
+
+.x-form-item-label {
+  color: var(--pm-text-dim) !important;
+}
+
+/* ===== Menus ===== */
+.x-menu {
+  background-color: var(--pm-bg-surface) !important;
+  border-color: var(--pm-border) !important;
+}
+
+.x-menu-item {
+  color: var(--pm-text) !important;
+}
+
+.x-menu-item-active {
+  background-color: var(--pm-bg-elevated) !important;
+}
+
+/* ===== Boundlist (Dropdowns) ===== */
+.x-boundlist {
+  background-color: var(--pm-bg-surface) !important;
+  border-color: var(--pm-border) !important;
+}
+
+.x-boundlist-item {
+  color: var(--pm-text) !important;
+}
+
+.x-boundlist-item-over {
+  background-color: var(--pm-bg-elevated) !important;
+}
+
+.x-boundlist-selected {
+  background-color: var(--pm-accent-dark) !important;
+  color: #fff !important;
+}
+
+/* ===== Grid/Tables ===== */
+.x-grid-item {
+  background-color: var(--pm-bg-base) !important;
+  color: var(--pm-text) !important;
+}
+
+.x-grid-item-alt {
+  background-color: var(--pm-bg-surface) !important;
+}
+
+.x-grid-item-over {
+  background-color: var(--pm-bg-elevated) !important;
+}
+
+.x-grid-item-selected {
+  background-color: var(--pm-accent-dark) !important;
+  color: #fff !important;
+}
+
+.x-grid-header-ct,
+.x-column-header {
+  background-color: var(--pm-bg-surface) !important;
+  border-color: var(--pm-border) !important;
+}
+
+.x-column-header-text {
+  color: var(--pm-text-dim) !important;
+}
+
+/* ===== Progress Bars ===== */
+.x-progress-bar {
+  background-color: var(--pm-accent) !important;
+}
+
+.x-progress.critical .x-progress-bar {
+  background-color: var(--pm-error) !important;
+}
+
+.x-progress.warning .x-progress-bar {
+  background-color: var(--pm-warning) !important;
+}
+
+/* ===== Status Icons ===== */
+.x-tree-icon-custom.running:after,
+.x-grid-icon-custom.running:after,
+.x-tree-icon-custom.online:after,
+.x-grid-icon-custom.online:after {
+  color: var(--pm-success) !important;
+}
+
+.x-tree-icon-custom.stopped:after,
+.x-grid-icon-custom.stopped:after,
+.x-tree-icon-custom.error:after,
+.x-grid-icon-custom.error:after {
+  color: var(--pm-error) !important;
+}
+
+.x-tree-icon-custom.paused:after,
+.x-grid-icon-custom.paused:after,
+.x-tree-icon-custom.pending:after,
+.x-grid-icon-custom.pending:after {
+  color: var(--pm-warning) !important;
+}
+
+/* ===== Windows ===== */
+.x-window {
+  background-color: var(--pm-bg-base) !important;
+  border-color: var(--pm-border) !important;
+}
+
+/* ===== Splitter ===== */
+.x-splitter {
+  background-color: var(--pm-bg-elevated) !important;
+}
+
+/* ===== Tooltips ===== */
+.x-tip {
+  background-color: var(--pm-bg-elevated) !important;
+  border-color: var(--pm-border) !important;
+  color: var(--pm-text) !important;
+}
+
+/* ===== Masks ===== */
+.x-mask-msg {
+  background-color: var(--pm-bg-surface) !important;
+  border-color: var(--pm-border) !important;
+  color: var(--pm-text) !important;
+}
+
+/* ===== Tools ===== */
+.x-tool {
+  color: var(--pm-text-dim) !important;
+}
+
+.x-tool:hover {
+  color: var(--pm-accent-light) !important;
+}
+
+/* ===== Scrollbars ===== */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--pm-bg-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--pm-border);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--pm-text-muted);
+}
+
+/* ===== Selection ===== */
+::selection {
+  background: var(--pm-accent);
+  color: #fff;
+}

@@ -15,6 +15,7 @@ A theme collection for Proxmox VE that integrates with the native Color Theme se
 |-------|-------------|
 | **UniFi** | Dark theme inspired by Ubiquiti UniFi Network Application |
 | **Blue Slate** | Modern dark theme with blue accents (Tailwind Slate palette) |
+| **GitHub Dark** | Dark theme based on GitHub's dark mode colors |
 
 ## Installation
 

@@ -1,0 +1,47 @@
+// ProxMorph Theme: GitHub Dark
+// Inspired by GitHub's dark theme color palette
+
+// ============================================
+// THEME CONFIGURATION
+// ============================================
+
+$theme-name: "GitHub Dark";
+
+// Primary Accent Color (GitHub Blue)
+$accent: #2f81f7;
+$accent-light: #58a6ff;
+$accent-dark: #1f6feb;
+
+// Status Colors (GitHub semantic colors)
+$success: #3fb950;   // GitHub green
+$warning: #d29922;   // GitHub yellow/orange
+$error: #f85149;     // GitHub red
+$info: #58a6ff;      // GitHub blue
+
+// Background Colors (GitHub Dark Default)
+$bg-base: #0d1117;       // canvas.default
+$bg-surface: #161b22;    // canvas.subtle
+$bg-elevated: #21262d;   // canvas.overlay
+
+// Text Colors
+$text-primary: #e6edf3;   // fg.default
+$text-secondary: #8d96a0; // fg.muted
+$text-muted: #6e7681;     // fg.subtle
+
+// Border Colors
+$border: #30363d;         // border.default
+$border-subtle: #21262d;  // border.muted
+
+// ============================================
+// Build theme
+// ============================================
+/*!#{$theme-name}*/
+
+@import '../base/variables';
+@import '../base/base';
+@import '../base/navigation';
+@import '../base/buttons';
+@import '../base/forms';
+@import '../base/tables';
+@import '../base/status';
+@import '../base/misc';
