@@ -5,6 +5,22 @@ All notable changes to ProxMorph will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.2] - 2025-01-14
+
+### Fixed
+- Column panel gap in dialog forms (Edit Network Device, etc.)
+  - Added visible 25px gap between left and right form columns
+  - Removed width override that was forcing columns to full width
+  - Removed padding reset that was eliminating the gap
+
+## [2.0.1] - 2025-01-14
+
+### Fixed
+- Resource grid labels (Memory, Cores) no longer appear dark gray
+  - Root cause: `filter: invert(90%)` on TD cells was inverting both icons AND text
+  - Solution: Isolated filter to icons via `::before` pseudo-elements
+- FontAwesome icons in resource grid (Swap, Root Disk) now use bright color (#DEE0E3)
+
 ## [2.0.0] - 2026-01-13
 
 ### Changed

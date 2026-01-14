@@ -2,7 +2,7 @@
 /*
  * ProxMorph Theme: UniFi
  * Authentic recreation of Ubiquiti UniFi Network Application UI
- * Version: 5.36 - UniFi-authentic checkbox/radio button styling
+ * Version: 5.70 - Fixed column panel gap in dialogs (padding-left: 25px on right column)
  * 
  * UniFi Color Palette (extracted from live instance):
  * 
@@ -414,18 +414,120 @@ div[class*="rrd"] img {
     filter: invert(90%);
 }
 
+/* v5.37: Resource grid icon inversion - exclude cells that contain text
+   The filter on TD cells was inverting both icons AND text, causing dark gray labels.
+   Solution: Remove filter from cells, apply via ::before pseudo-element to icon only */
 .pve-itype-icon-cpu,
 .pve-itype-icon-cdrom,
 .pve-itype-icon-memory,
 .pve-itype-icon-pci,
 .pve-itype-icon-serial,
 .pve-itype-icon-die,
-.pmx-itype-icon-processor,
-.pmx-itype-icon-memory,
-.pve-itype-icon-storage,
 .x-tree-node-harddisk,
 .x-grid-tree-node-expanded .x-tree-node-harddisk {
     filter: invert(90%);
+}
+
+/* v5.37: Resource grid cells (td elements) - isolate filter to icons only */
+td.pmx-itype-icon-processor,
+td.pmx-itype-icon-memory,
+td.pve-itype-icon-storage {
+    filter: none !important;
+    background-image: none !important;
+    position: relative !important;
+    padding-left: 26px !important;
+}
+
+/* Pseudo-element icons with filter applied only to the icon (td cells only) */
+td.pmx-itype-icon-processor::before,
+td.pmx-itype-icon-memory::before,
+td.pve-itype-icon-storage::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 6px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 16px !important;
+    height: 16px !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    filter: invert(90%) !important;
+}
+
+td.pmx-itype-icon-processor::before {
+    background-image: url('/pve2/images/icon-cpu.svg') !important;
+}
+
+td.pmx-itype-icon-memory::before {
+    background-image: url('/pwt/images/icon-ram.svg') !important;
+}
+
+td.pve-itype-icon-storage::before {
+    background-image: url('/pve2/images/icon-harddisk.svg') !important;
+}
+
+/* v5.38: Summary panel icons (i elements) - reset to original Proxmox styling */
+i.pmx-itype-icon-processor,
+i.pmx-itype-icon-memory,
+.pmx-icon.pmx-itype-icon-processor,
+.pmx-icon.pmx-itype-icon-memory {
+    filter: invert(90%) !important;
+    background-repeat: no-repeat !important;
+    background-position: 3px center !important;
+    background-size: 14px 14px !important;
+    padding-left: 18px !important;
+    position: static !important;
+}
+
+i.pmx-itype-icon-processor,
+.pmx-icon.pmx-itype-icon-processor {
+    background-image: url('/pve2/images/icon-cpu.svg') !important;
+}
+
+i.pmx-itype-icon-memory,
+.pmx-icon.pmx-itype-icon-memory {
+    background-image: url('/pwt/images/icon-ram.svg') !important;
+}
+
+/* Disable ::before pseudo-elements on Summary panel icons */
+i.pmx-itype-icon-processor::before,
+i.pmx-itype-icon-memory::before,
+.pmx-icon.pmx-itype-icon-processor::before,
+.pmx-icon.pmx-itype-icon-memory::before {
+    content: none !important;
+    display: none !important;
+}
+
+/* v5.38: Summary panel SWAP and Bootdisk FontAwesome icons - consistent sizing */
+.left-aligned .fa.fa-refresh,
+.left-aligned .fa.fa-hdd-o {
+    font-size: 14px !important;
+}
+
+/* v5.40: Fix "More" button position in IPs section of Summary panel
+   Move button next to "IPs" label, vertically centered with IP addresses */
+[id^="pveIPViewLXC-"] [id^="button-"].x-btn {
+    transform: translate(-320px, -29px) !important;
+}
+
+/* Cell inner content alignment */
+.pmx-itype-icon-processor .x-grid-cell-inner,
+.pmx-itype-icon-memory .x-grid-cell-inner,
+.pve-itype-icon-storage .x-grid-cell-inner {
+    padding-left: 0 !important;
+}
+
+/* v5.37: FontAwesome icons in resource grid (Swap, Root Disk) */
+.pve-itype-fa .x-grid-cell-inner {
+    padding-left: 4px !important;
+}
+
+.pve-itype-fa .pve-grid-fa,
+.pve-itype-fa .pve-grid-fa.fa,
+.x-grid-item .pve-itype-fa .fa {
+    color: #DEE0E3 !important;
+    margin-right: 4px !important;
 }
 
 .x-tree-icon-custom,
@@ -954,6 +1056,47 @@ tr:not(.x-grid-tree-node-expanded) .x-tree-expander::before {
 .x-form-spinner-default {
     background-color: #282B2F;
 }
+
+/* v5.59: Make spinner buttons fill container with FontAwesome arrows */
+.x-form-spinner-up,
+.x-form-spinner-down {
+    height: 13px !important;
+    background-image: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free', FontAwesome !important;
+    font-weight: 900 !important;
+    font-size: 7px !important;
+    color: #B7BCC2 !important;
+}
+
+.x-form-spinner-up::before {
+    content: '\f077' !important;
+    display: block !important;
+}
+
+.x-form-spinner-down::before {
+    content: '\f078' !important;
+    display: block !important;
+}
+
+/* v5.62: Dialog form field alignment - normalize trigger-wrap widths to match native theme (174px) */
+.x-window .x-container .x-form-trigger-wrap,
+.x-window .x-form-item-body .x-form-trigger-wrap {
+    width: 174px !important;
+    max-width: 174px !important;
+}
+
+/* Ensure input fills the trigger wrap */
+.x-window .x-container .x-form-trigger-wrap input.x-form-field {
+    width: calc(100% - 2px) !important;
+}
+
+/* v5.63: REMOVED v5.61 margin-left rule - was incorrectly targeting form column panels
+   (Rate limit/Host-Managed section) instead of just Advanced settings. The selector
+   .x-container.x-box-item:last-of-type .x-panel.x-box-item:last-child matched form panels
+   causing field cutoff and misalignment issues. */
 
 .x-form-cb-label-default {
     color: #B7BCC2;
@@ -1792,6 +1935,9 @@ div[id^="pveResourceTree-"][id$="-body"] {
    - Form fields stretch to full width (override inline 380px)
    - Footer checkbox/button gap fixed (was -7px overlap)
    - Footer toolbar takes full width (override inline 374px)
+   v5.65: Fix mainPanel width constraint - ExtJS calculates based on
+          original parent width before CSS override, causing 549px instead
+          of ~580px. Force direct child panels to use full available width.
    ===================================================== */
 
 /* Override inline width on window form panel body */
@@ -1804,6 +1950,37 @@ div[id^="pveResourceTree-"][id$="-body"] {
 /* Ensure form containers use full width */
 .x-window .x-autocontainer-outerCt {
     width: 100% !important;
+}
+
+/* v5.65: Force main form panels to use full available width.
+   ExtJS sets inline width based on pre-CSS parent dimensions.
+   This overrides that to use actual available space.
+   v5.66: Changed to width:100% - parent's border-box padding already
+          provides the 10px offset on each side.
+   v5.67: Also force nested x-box-inner containers and child panels
+          to use full width - ExtJS calculates all levels at render time.
+   v5.68: Added targeting for .x-container.x-box-item (container-NNNN)
+          which is the intermediate container with width: 549px inline. */
+.x-window .x-autocontainer-innerCt > .x-panel {
+    width: 100% !important;
+}
+
+/* v5.68: Force nested containers to use full width (not column panels) */
+.x-window .x-panel .x-box-inner,
+.x-window .x-panel .x-box-target,
+.x-window .x-panel .x-container.x-box-item {
+    width: 100% !important;
+}
+
+/* v5.70: Let column panels inside .x-box-target use their ExtJS-calculated widths
+   These are the two-column layout panels (e.g., Name/MAC on left, IPv4/IPv6 on right) */
+.x-window .x-panel .x-box-target > .x-panel.x-box-item {
+    width: auto !important;
+}
+
+/* v5.70: Add extra left padding to right column for visible gap between columns */
+.x-window .x-panel .x-box-target > .x-panel.x-box-item:last-child {
+    padding-left: 25px !important;
 }
 
 /* Footer toolbar - take full width with right padding */
@@ -3223,11 +3400,6 @@ svg.x-surface {
     transform: translateY(9px) !important;
 }
 
-/* More button - move from right side to next to IPs label, vertically centered */
-[id^="pveIPViewLXC-"] [id^="button-"].x-btn {
-    transform: translate(-408px, -29px) !important;
-}
-
 /* =====================================================
    v5.18 FIX: CRITICAL - Restore grid/tree content visibility
    These must be at the END of the file to override earlier rules
@@ -3374,10 +3546,25 @@ svg.x-surface {
     top: 0px !important;
 }
 
-/* Restore: Tabpanel bodies (x-fit-item) back to 26px for tab bar clearance */
-.x-window .x-panel.x-fit-item > .x-panel-bodyWrap > .x-panel-body.x-panel-body-default {
+/* v5.57: Only restore 26px offset for actual tabpanels (with tab bar), not regular form panels */
+.x-window .x-panel.x-fit-item.x-tabpanel > .x-panel-bodyWrap > .x-panel-body.x-panel-body-default {
     top: 26px !important;
 }
+
+/* =====================================================
+   v5.58: Fix modal form field width overflow
+   Form fields were extending past the right edge of the modal.
+   Constrain autocontainer and trigger wrap widths.
+   v5.64: REMOVED margin-right rule - was causing input field cutoff.
+          The autocontainer constraint is sufficient for overflow prevention.
+   ===================================================== */
+/* Force autocontainer to inherit parent width */
+.x-window .x-autocontainer-outerCt {
+    width: inherit !important;
+    max-width: 100% !important;
+}
+
+/* v5.61: REMOVED - trigger-wrap width consolidated into v5.62 rule above (lines 1085-1090) */
 
 /* =====================================================
    v5.46: Remove white focus border from tabs
