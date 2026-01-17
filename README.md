@@ -20,6 +20,7 @@ Comparison between default Proxmox Dark theme and UniFi theme:
 | Theme | Description |
 |-------|-------------|
 | **UniFi** | Dark theme inspired by Ubiquiti UniFi Network Application |
+| **Github Dark** | In Progress|
 
 More themes inspired by other vendor UIs are in development.
 
