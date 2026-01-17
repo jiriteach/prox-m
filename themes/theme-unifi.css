@@ -2,7 +2,7 @@
 /*
  * ProxMorph Theme: UniFi
  * Authentic recreation of Ubiquiti UniFi Network Application UI
- * Version: 5.83
+ * Version: 5.84
  * Author: N.E.S.T. / Dr. Dranglog
  * 
  * UniFi Color Palette (extracted from live instance):
@@ -39,60 +39,11 @@
    CSS VARIABLES
    ===================================================== */
 :root {
-    /* UniFi design tokens (excerpted from UniFi Network.html) */
-    --ubnt-color-DN60: #151725;
-    --ubnt-color-DN55: #1c1e2d;
-    --ubnt-color-DN50: #242635;
-    --ubnt-color-DN40: #333543;
-    --ubnt-color-DN30: #525461;
-    --ubnt-color-DN20: #7e8190;
-    --ubnt-color-DN10: #a4a7b5;
-    --ubnt-color-DN0: #c2c4ce;
-    --ubnt-color-N0: #fff;
-    --ubnt-color-N10: #fbfbfc;
-    --ubnt-color-N20: #f8f8f9;
-    --ubnt-color-N30: #f4f4f5;
-    --ubnt-color-N40: #f1f2f4;
-    --ubnt-color-N50: #e5e7ed;
-    --ubnt-color-N60: #d6d9e2;
-    --ubnt-color-N70: #c2c4ce;
-    --ubnt-color-BN0: #010a19;
-    --ubnt-color-BN10: #0b1527;
-    --ubnt-color-BN20: #101a2b;
-    --ubnt-color-BN30: #151f30;
-    --ubnt-color-BN40: #1a2535;
-    --ubnt-color-BN50: #1f2b3b;
-    --ubnt-color-P0: #003c9e;
-    --ubnt-color-P10: #0056c7;
-    --ubnt-color-P20: #006fff;
-    --ubnt-color-P25: #57a0ff;
-    --ubnt-color-P30: #46c7fd;
-    --ubnt-color-P40: #39cc64;
-    --ubnt-color-P50: #bfe041;
-    --ubnt-color-P55: #ffdb1a;
-    --ubnt-color-P60: #f5a623;
-    --ubnt-color-P70: #f03a3e;
-    --ubnt-color-P80: #a252e3;
-    --ubnt-color-P90: #6b34e0;
-    --ubnt-color-P100: #7e8190;
-    --ubnt-color-primary-D0: #0266e9;
-    --ubnt-color-primary-L0: #1a7dff;
-    --ubnt-color-primary-L10: #57a0ff;
-    --ubnt-color-primary-L20: #bfdbff;
-    --ubnt-color-primary-L30: #d9eaff;
-    --ubnt-color-primary-L40: #e5f0ff;
-    --ubnt-color-primary-L50: #f2f8ff;
-    --ubnt-color-primary-T5: rgba(0, 111, 255, 0.05);
-    --ubnt-color-primary-T20: rgba(0, 111, 255, 0.2);
-    --ubnt-color-primary-T40: rgba(0, 111, 255, 0.4);
-    --ubnt-color-primary-T50: rgba(0, 111, 255, 0.5);
-    --ubnt-color-success-T40: rgba(57, 204, 100, 0.4);
+    /* UniFi design tokens (only the ones actually used) */
+    --ubnt-color-primary: #006fff;
     --ubnt-color-danger: #f03a3e;
     --ubnt-color-warning: #f5a623;
     --ubnt-color-success: #39cc64;
-    --ubnt-color-primary: #006fff;
-    --ubnt-color-text-link: #006fff;
-    --ubnt-color-text-link-hover: #57a0ff;
 
     /* ProxMorph semantic variables */
     --pm-accent: #006EFF;
@@ -221,6 +172,11 @@ th,
     border-radius: 0 !important;
 }
 
+/* Restore right border for grids inside windows (fixed v5.4 over-reach) */
+.x-window .x-panel-body.x-grid-body {
+    border-right: 1px solid #34383D !important;
+}
+
 /* =====================================================
    v5.73: WINDOW/MODAL BORDER-RADIUS CONSISTENCY
    Reset all children to 0, then re-apply specific radii
@@ -245,6 +201,31 @@ th,
 .x-window {
     border-radius: 8px !important;
     overflow: hidden !important;
+    min-width: 295px !important;
+    /* v5.85: Match Proxmox default to prevent scrollbars */
+}
+
+/* v5.86: Fix dialog header/body not matching dialog width when min-width is applied
+   Root cause: ExtJS sets inline width on header/body that's smaller than min-width forces.
+   Solution: Force header/body to use 100% width so they inherit parent's computed width. */
+.x-window > .x-window-header,
+.x-window > .x-window-body,
+.x-window > .x-window-bodyWrap,
+.x-window-bodyWrap > .x-window-body {
+    width: 100% !important;
+}
+
+/* Ensure box containers inside header use full width */
+.x-window-header > .x-box-inner,
+.x-window-header > .x-box-inner > .x-box-target {
+    width: 100% !important;
+}
+
+/* Header title should expand appropriately */
+.x-window-header-title {
+    width: auto !important;
+    flex: 1 !important;
+    max-width: calc(100% - 30px) !important;
 }
 
 /* 3. Window header - top corners only */
@@ -292,6 +273,11 @@ th,
 .x-form-trigger-wrap-default {
     border-radius: 4px !important;
     overflow: hidden !important;
+}
+
+/* Constrain autocontainer width (Moved from L3450) */
+.x-window .x-autocontainer-outerCt {
+    max-width: 100% !important;
 }
 
 /* Form text wrap - left side rounded */
@@ -400,7 +386,10 @@ div[class*="rrd"] img {
    MASKS & OVERLAYS
    ===================================================== */
 .x-mask {
-    background-color: rgba(0, 0, 0, 0.7);
+    /* v5.48: Background blur + 0.5 opacity */
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
 /* Disabled field-groups: keep the native "reduced opacity" look (no black mask overlay) */
@@ -810,19 +799,38 @@ tr:not(.x-grid-tree-node-expanded) .x-tree-expander::before {
 
 /* =====================================================
    BUTTONS - Clean, minimal style (UniFi authentic)
-   Slightly smaller size with proper padding
    ===================================================== */
 .x-btn-default-small {
     background-color: #006EFF;
     border: none;
     border-radius: 6px;
-    padding: 6px 12px !important;
+    padding: 5px 10px !important;
+    min-height: 26px !important;
+    /* v5.29: Header buttons (Create VM, Create CT, root@pam) - consistent 28px height with vertical centering */
+    /* Exclude tag edit buttons (display:none when hidden, :has(.fa-check) for checkmark) */
+    height: 28px !important;
     min-height: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 3px 8px !important;
 }
 
 .x-btn-default-small .x-btn-inner {
     color: #ffffff;
     padding: 2px 4px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+/* Flex container logic (Merged from L3242) */
+.x-btn.x-btn-default-small .x-btn-button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.x-btn.x-btn-default-small .x-btn-icon-el {
+    justify-content: center !important;
 }
 
 .x-btn-default-small.x-btn-over,
@@ -830,16 +838,18 @@ tr:not(.x-grid-tree-node-expanded) .x-tree-expander::before {
     background-color: #338BFF;
 }
 
+/* Pressed state */
+.x-btn-default-small.x-btn-pressed,
+.x-btn-default-small.x-btn-menu-active {
+    background-color: #0056CC;
+}
+
 .x-btn-default-small.x-btn.x-btn-disabled {
     background-color: #006EFF;
     opacity: 0.4;
 }
 
-.x-btn-default-small.x-btn.x-btn-pressed {
-    background-color: #0052cc;
-}
-
-/* Toolbar buttons - subtle, minimal style */
+/* Toolbar Buttons - Compact & Transparent */
 .x-btn-default-toolbar-small {
     background-color: transparent;
     border: 1px solid #34383D !important;
@@ -1151,10 +1161,7 @@ tr:not(.x-grid-tree-node-expanded) .x-tree-expander::before {
     width: calc(100% - 2px) !important;
 }
 
-/* v5.63: REMOVED v5.61 margin-left rule - was incorrectly targeting form column panels
-   (Rate limit/Host-Managed section) instead of just Advanced settings. The selector
-   .x-container.x-box-item:last-of-type .x-panel.x-box-item:last-child matched form panels
-   causing field cutoff and misalignment issues. */
+/* v5.63: Removed v5.61 margin-left rule that caused form alignment issues */
 
 .x-form-cb-label-default {
     color: #B7BCC2;
@@ -1630,18 +1637,13 @@ div[id^="pveResourceTree-"][id$="-body"] {
     border-top: 1px solid var(--pm-border) !important;
 }
 
-/* Vertical splitter (between left tree and content) - gap with visible line */
+/* Vertical splitter - gap with visible line */
 .x-splitter-vertical {
     width: 7px !important;
     min-width: 7px !important;
     background-color: transparent !important;
     border-right: 1px solid #444444 !important;
     z-index: 10 !important;
-}
-
-/* Push content panel to account for wider splitter */
-#content {
-    margin-left: 6px !important;
 }
 
 .x-keyboard-mode .x-splitter-focus::after {
@@ -1658,6 +1660,33 @@ div[id^="pveResourceTree-"][id$="-body"] {
 .x-tab-default.x-tab-over {
     background-color: rgba(249, 250, 250, 0.04);
     border: none;
+}
+
+/* Remove white focus border/outline from tabs (v5.46) */
+.x-tab:focus,
+.x-tab.x-tab-focus,
+.x-tab.x-tab-active:focus,
+.x-keyboard-mode .x-tab:focus,
+.x-keyboard-mode .x-tab-focus,
+.x-keyboard-mode .x-tab-active.x-tab-focus,
+.x-tab-default:focus,
+.x-tab-default.x-tab-focus,
+.x-tab-bar .x-tab:focus,
+.x-tab-bar .x-tab.x-tab-focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+}
+
+.x-tab:focus::before,
+.x-tab:focus::after,
+.x-tab.x-tab-focus::before,
+.x-tab.x-tab-focus::after,
+.x-keyboard-mode .x-tab:focus::before,
+.x-keyboard-mode .x-tab:focus::after {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .x-tab-default.x-tab.x-tab-active {
@@ -2008,8 +2037,7 @@ div[id^="pveResourceTree-"][id$="-body"] {
 /* =====================================================
    v5.74: DIALOG LAYOUT FIXES - REMOVED OVERRIDES
    Removed all forced width/padding rules for panel bodies 
-   and inner containers. ExtJS calculates these precisely.
-   Forcing them causes cutoff/overflow in multi-column layouts.
+   Removed forced width/padding rules for panel bodies to prevent layout cutoff.
    ===================================================== */
 
 /* Only ensure the footer toolbar behaves correctly */
@@ -2453,24 +2481,6 @@ a:hover {
 }
 
 /* =====================================================
-   FIX: Button sizing - slightly larger
-   ===================================================== */
-.x-btn-default-small {
-    padding: 6px 14px !important;
-    min-height: 30px !important;
-}
-
-.x-btn-default-toolbar-small {
-    padding: 5px 12px !important;
-    min-height: 28px !important;
-}
-
-.x-btn-inner-default-small,
-.x-btn-inner-default-toolbar-small {
-    font-size: 13px !important;
-}
-
-/* =====================================================
    FIX: Labels and grid text - UniFi authentic colors
    ===================================================== */
 .x-grid-cell-inner,
@@ -2756,11 +2766,7 @@ svg text {
     box-shadow: 0 2px 8px rgba(0, 102, 255, 0.3) !important;
 }
 
-/* Toolbar buttons smooth fade */
-.x-btn-default-toolbar-small:hover,
-.x-btn-default-toolbar-small.x-btn-over {
-    background-color: #22252d !important;
-}
+/* Toolbar fade moved to Button Section */
 
 /* Grid row hover - smooth background change */
 .x-grid-item:hover,
@@ -2910,7 +2916,7 @@ div[class*="gauge"] {
     border-left: none !important;
 }
 
-/* Vertical splitter styling moved to line ~920 (v5.14) */
+
 
 /* =====================================================
    v5.1 FIX: Server view dropdown - smaller and styled
@@ -2929,50 +2935,23 @@ div[class*="gauge"] {
 }
 
 /* =====================================================
-   v5.1 FIX: Header buttons and search bar - smaller
+   v5.5 FIX: Preserve parent icon color when children are hovered
    ===================================================== */
-/* Reduce header button sizes */
-.x-btn-default-small {
-    padding: 5px 10px !important;
-    min-height: 26px !important;
+/* The selected parent row should ALWAYS have blue icon, regardless of child hover state */
+.x-treelist-item-selected.x-treelist-item-expanded>.x-treelist-row .x-treelist-item-icon {
+    color: #006EFF !important;
 }
 
-/* Toolbar buttons even smaller */
-.x-btn-default-toolbar-small {
-    padding: 3px 8px !important;
-    min-height: 24px !important;
-}
-
-/* Search bar sizing */
-.x-form-text-default,
-.x-form-trigger-wrap-default {
-    height: 26px !important;
-    min-height: 26px !important;
-}
-
-.x-form-text-default {
-    padding: 4px 8px !important;
-}
-
-/* Button text sizing */
-.x-btn-inner-default-small,
-.x-btn-inner-default-toolbar-small {
-    font-size: 12px !important;
+/* Even when entire treelist has hover somewhere, selected parent icon stays blue */
+.x-treelist-item-selected>.x-treelist-row .x-treelist-item-icon {
+    color: #006EFF !important;
 }
 
 /* =====================================================
    v5.2 FIX: Toolbar buttons - ensure border-radius applies
    ===================================================== */
-.x-btn-default-toolbar-small,
-.x-btn.x-btn-default-toolbar-small,
-.x-toolbar .x-btn-default-toolbar-small {
-    border-radius: 6px !important;
-    background-color: transparent !important;
-    border: 1px solid #34383D !important;
-    transition: background-color 0.15s ease, border-color 0.15s ease !important;
-}
 
-/* Hover state for toolbar buttons */
+/* Toolbar button hover state */
 .x-btn-default-toolbar-small:hover,
 .x-btn-default-toolbar-small.x-btn-over {
     background-color: #34383D !important;
@@ -3264,65 +3243,13 @@ html {
     color: #DEE0E3 !important;
 }
 
-/* =====================================================
-   v5.5 FIX: Preserve parent icon color when children are hovered
-   ===================================================== */
-/* The selected parent row should ALWAYS have blue icon, regardless of child hover state */
-.x-treelist-item-selected.x-treelist-item-expanded>.x-treelist-row .x-treelist-item-icon {
-    color: #006EFF !important;
-}
 
-/* Even when entire treelist has hover somewhere, selected parent icon stays blue */
-.x-treelist-item-selected>.x-treelist-row .x-treelist-item-icon {
-    color: #006EFF !important;
-}
 
-/* =====================================================
-   v5.14 FINAL OVERRIDES - These must come last to ensure precedence
-   Fixes for: dropdown border-radius, splitter spacing, button alignment
-   ===================================================== */
 
-/* Force 4px border-radius on form/dropdown containers */
-.x-form-trigger-wrap,
-.x-form-trigger-wrap-default {
-    border-radius: 4px !important;
-    overflow: hidden !important;
-}
 
-.x-form-text-wrap,
-.x-form-text-wrap-default {
-    border-radius: 4px 0 0 4px !important;
-}
 
-.x-form-text,
-.x-form-text-default {
-    border-radius: 4px 0 0 4px !important;
-}
 
-.x-form-trigger,
-.x-form-trigger-default,
-.x-form-arrow-trigger,
-.x-form-arrow-trigger-default {
-    border-radius: 0 4px 4px 0 !important;
-}
 
-/* Layout containers must have 0 radius to prevent clipping */
-.x-box-layout-ct,
-.x-box-inner,
-.x-box-target,
-.x-container,
-.x-container-default {
-    border-radius: 0 !important;
-}
-
-/* Vertical splitter - gap with visible line */
-.x-splitter-vertical {
-    width: 7px !important;
-    min-width: 7px !important;
-    background-color: transparent !important;
-    border-right: 1px solid #444444 !important;
-    z-index: 10 !important;
-}
 
 /* Content panel margin for splitter spacing */
 #content {
@@ -3355,23 +3282,7 @@ svg.x-surface {
 /* =====================================================
    HEADER BUTTONS - Vertical centering fix
    ===================================================== */
-/* Button container uses flexbox */
-.x-btn.x-btn-default-small .x-btn-button {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-/* Icon - only justify-content */
-.x-btn.x-btn-default-small .x-btn-icon-el {
-    justify-content: center !important;
-}
-
-/* Text element */
-.x-btn.x-btn-default-small .x-btn-inner {
-    display: inline-flex !important;
-    align-items: center !important;
-}
+/* Button flex styles moved to Button Section */
 
 /* Documentation button */
 .proxmox-inline-button {
@@ -3532,17 +3443,7 @@ svg.x-surface {
    Button was growing larger (24px → 26px) and text was gray instead of white
    ===================================================== */
 
-/* Issue 1: Text should be white when menu is active (same as pressed state) */
-.x-btn-default-toolbar-small.x-btn.x-btn-menu-active .x-btn-inner-default-toolbar-small,
-.x-btn-default-toolbar-small.x-btn.x-btn-menu-active .x-btn-icon-el-default-toolbar-small {
-    color: #ffffff !important;
-}
-
-/* Issue 2: Keep button size consistent (override line 2607 rules that cause growth) */
-.x-btn-default-toolbar-small.x-btn-menu-active {
-    padding: 3px 8px !important;
-    min-height: 24px !important;
-}
+/* Toolbar menu fix moved to Button Section */
 
 /* =====================================================
    v5.43: Compact tab bar for Tasks/Cluster log panel
@@ -3579,32 +3480,15 @@ svg.x-surface {
    Uses ultra-high specificity with 'body' prefix to win CSS battles.
    ===================================================== */
 
-/* STEP 2: Remove gap between window header and content body - REMOVED
-   This rule forced top:0 on all panel bodies, which caused grid content 
-   to underlap grid headers (e.g., in Confirm tab). ExtJS correctly positions
-   grid bodies below headers, so we shouldn't override 'top'. */
-/* body .x-window .x-panel-body.x-panel-body-default {
-    top: 0px !important;
-} */
-
-/* STEP 2: Restore 26px ONLY for the panel body that immediately follows a tab bar */
-/* This is the ONLY element that needs offset (to clear the tab bar) */
+/* Restore 26px ONLY for the panel body that immediately follows a tab bar */
 body .x-window .x-panel .x-panel-bodyWrap>.x-tab-bar+.x-panel-body.x-panel-body-default {
     top: 26px !important;
 }
 
-/* STEP 3: Zero out padding in bodyWraps that could cause extra gaps */
+/* Zero out padding in bodyWraps that could cause extra gaps */
 .x-window .x-panel-bodyWrap {
     padding: 0 !important;
 }
-
-/* STEP 4: Standardized form content padding - REMOVED
-   ExtJS handles padding internally. Forcing 10px here causes
-   cutoff in multi-column layouts because width calculations
-   don't account for this extra forced padding. */
-/* .x-window .x-autocontainer-innerCt {
-    padding: 10px !important;
-} */
 
 /* STEP 5: Fix overflow clipping - allow visible overflow in modal panels */
 .x-window .x-panel-body {
@@ -3612,9 +3496,9 @@ body .x-window .x-panel .x-panel-bodyWrap>.x-tab-bar+.x-panel-body.x-panel-body-
 }
 
 /* But keep auto overflow on the main window body for scrolling */
-.x-window .x-window-body {
+/* .x-window .x-window-body {
     overflow: auto !important;
-}
+} */
 
 /* =====================================================
    v5.58: Fix modal form field width overflow
@@ -3622,56 +3506,17 @@ body .x-window .x-panel .x-panel-bodyWrap>.x-tab-bar+.x-panel-body.x-panel-body-
    Constrain autocontainer and trigger wrap widths.
    v5.64: REMOVED margin-right rule - was causing input field cutoff.
           The autocontainer constraint is sufficient for overflow prevention.
-   ===================================================== */
-/* Force autocontainer to inherit parent width */
-.x-window .x-autocontainer-outerCt {
-    /* width: inherit !important; v5.78: REMOVED to fix Login/Dialog layouts */
-    max-width: 100% !important;
-}
 
-/* v5.61: REMOVED - trigger-wrap width consolidated into v5.62 rule above (lines 1085-1090) */
 
-/* =====================================================
-   v5.46: Remove white focus border from tabs
-   Removes the visible outline/border that appears when
-   clicking or focusing on tabs in dialogs and main UI
-   ===================================================== */
-.x-tab:focus,
-.x-tab.x-tab-focus,
-.x-tab.x-tab-active:focus,
-.x-keyboard-mode .x-tab:focus,
-.x-keyboard-mode .x-tab-focus,
-.x-keyboard-mode .x-tab-active.x-tab-focus,
-.x-tab-default:focus,
-.x-tab-default.x-tab-focus,
-.x-tab-bar .x-tab:focus,
-.x-tab-bar .x-tab.x-tab-focus {
-    outline: none !important;
-    box-shadow: none !important;
-    border-color: transparent !important;
-}
+/* v5.61: Trigger-wrap width rule removed (consolidated into form layout section) */
 
-/* Tab pseudo-elements - remove focus indicators */
-.x-tab:focus::before,
-.x-tab:focus::after,
-.x-tab.x-tab-focus::before,
-.x-tab.x-tab-focus::after,
-.x-keyboard-mode .x-tab:focus::before,
-.x-keyboard-mode .x-tab:focus::after {
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
+
 
 /* =====================================================
    v5.47: Restore right border on disk list panel in wizards
-   The v5.4 rule ".x-panel-body.x-grid-body { border-right: none }"
-   was too broad - it also removed borders from wizard dialogs.
-   This restores the right border for grids inside windows/dialogs.
+   Restores right border for grids inside windows (fixed v5.4 over-reach).
    ===================================================== */
-.x-window .x-panel-body.x-grid-body {
-    border-right: 1px solid #34383D !important;
-}
+
 
 /* =====================================================
    v5.48: MODAL ANIMATIONS - Open Animation + Background Blur
@@ -3713,12 +3558,7 @@ body .x-window .x-panel .x-panel-bodyWrap>.x-tab-bar+.x-panel-body.x-panel-body-
     }
 }
 
-/* Background mask - blur effect for modern look */
-.x-mask {
-    backdrop-filter: blur(4px) !important;
-    -webkit-backdrop-filter: blur(4px) !important;
-    background-color: rgba(0, 0, 0, 0.5) !important;
-}
+
 
 /* Window/Dialog - open animation */
 .x-window,
