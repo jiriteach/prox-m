@@ -384,7 +384,7 @@ show_status() {
     if [[ -n "$THEMES_SOURCE" && -d "$THEMES_SOURCE" ]]; then
         for css_file in "${THEMES_SOURCE}"/theme-*.css; do
             if [[ -f "${THEMES_DIR}/$(basename "$css_file")" ]]; then
-                ((installed++))
+                installed=$((installed + 1))
             fi
         done
     fi
