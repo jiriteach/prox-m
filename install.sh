@@ -181,20 +181,21 @@ install_themes() {
     print_info "Installing ProxMorph themes..."
     
     # Find themes source - prefer INSTALL_DIR if it exists, otherwise use script dir
+    THEMES_SOURCE=""
     if [[ -d "${INSTALL_DIR}/themes" ]]; then
         THEMES_SOURCE="${INSTALL_DIR}/themes"
     else
-        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd 2>/dev/null)"
         # Handle piped execution (e.g., bash <(curl ...)) where BASH_SOURCE is /dev/fd/*
-        if [[ "$SCRIPT_DIR" == /dev/fd* || "$SCRIPT_DIR" == /proc/* ]]; then
-            SCRIPT_DIR=""
+        if [[ -n "$SCRIPT_DIR" && "$SCRIPT_DIR" != /dev/fd* && "$SCRIPT_DIR" != /proc/* && -d "${SCRIPT_DIR}/themes" ]]; then
+            THEMES_SOURCE="${SCRIPT_DIR}/themes"
         fi
-        THEMES_SOURCE="${SCRIPT_DIR}/themes"
     fi
     
-    if [[ ! -d "$THEMES_SOURCE" ]]; then
-        print_error "Themes directory not found: $THEMES_SOURCE"
-        print_info "Run with 'update' to download themes from GitHub releases first"
+    if [[ -z "$THEMES_SOURCE" || ! -d "$THEMES_SOURCE" ]]; then
+        print_error "Themes directory not found"
+        print_info "Run: bash <(curl -fsSL https://raw.githubusercontent.com/IT-BAER/proxmorph/main/install.sh) update"
+        print_info "Then: bash <(curl -fsSL https://raw.githubusercontent.com/IT-BAER/proxmorph/main/install.sh) install"
         exit 1
     fi
     
@@ -276,16 +277,20 @@ reinstall_themes() {
 uninstall_themes() {
     print_info "Uninstalling ProxMorph themes..."
     
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    # Handle piped execution (e.g., bash <(curl ...)) where BASH_SOURCE is /dev/fd/*
-    if [[ "$SCRIPT_DIR" == /dev/fd* || "$SCRIPT_DIR" == /proc/* ]]; then
-        SCRIPT_DIR=""
-    fi
-    # Prefer INSTALL_DIR for themes source
+    # Find themes source - prefer INSTALL_DIR if it exists
+    THEMES_SOURCE=""
     if [[ -d "${INSTALL_DIR}/themes" ]]; then
         THEMES_SOURCE="${INSTALL_DIR}/themes"
     else
-        THEMES_SOURCE="${SCRIPT_DIR}/themes"
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd 2>/dev/null)"
+        if [[ -n "$SCRIPT_DIR" && "$SCRIPT_DIR" != /dev/fd* && "$SCRIPT_DIR" != /proc/* && -d "${SCRIPT_DIR}/themes" ]]; then
+            THEMES_SOURCE="${SCRIPT_DIR}/themes"
+        fi
+    fi
+    
+    if [[ -z "$THEMES_SOURCE" ]]; then
+        # Fall back to checking installed themes in THEMES_DIR
+        THEMES_SOURCE="$THEMES_DIR"
     fi
     
     # Remove CSS files
@@ -313,18 +318,17 @@ list_themes() {
     echo ""
     
     # Find themes source - prefer INSTALL_DIR if it exists
+    THEMES_SOURCE=""
     if [[ -d "${INSTALL_DIR}/themes" ]]; then
         THEMES_SOURCE="${INSTALL_DIR}/themes"
     else
-        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-        # Handle piped execution (e.g., bash <(curl ...)) where BASH_SOURCE is /dev/fd/*
-        if [[ "$SCRIPT_DIR" == /dev/fd* || "$SCRIPT_DIR" == /proc/* ]]; then
-            SCRIPT_DIR=""
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd 2>/dev/null)"
+        if [[ -n "$SCRIPT_DIR" && "$SCRIPT_DIR" != /dev/fd* && "$SCRIPT_DIR" != /proc/* && -d "${SCRIPT_DIR}/themes" ]]; then
+            THEMES_SOURCE="${SCRIPT_DIR}/themes"
         fi
-        THEMES_SOURCE="${SCRIPT_DIR}/themes"
     fi
     
-    if [[ ! -d "$THEMES_SOURCE" ]]; then
+    if [[ -z "$THEMES_SOURCE" || ! -d "$THEMES_SOURCE" ]]; then
         print_error "Themes directory not found. Run 'update' first to download themes."
         return 1
     fi
@@ -367,22 +371,23 @@ show_status() {
     
     # Count installed themes
     installed=0
+    THEMES_SOURCE=""
     if [[ -d "${INSTALL_DIR}/themes" ]]; then
         THEMES_SOURCE="${INSTALL_DIR}/themes"
     else
-        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-        # Handle piped execution (e.g., bash <(curl ...)) where BASH_SOURCE is /dev/fd/*
-        if [[ "$SCRIPT_DIR" == /dev/fd* || "$SCRIPT_DIR" == /proc/* ]]; then
-            SCRIPT_DIR=""
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd 2>/dev/null)"
+        if [[ -n "$SCRIPT_DIR" && "$SCRIPT_DIR" != /dev/fd* && "$SCRIPT_DIR" != /proc/* && -d "${SCRIPT_DIR}/themes" ]]; then
+            THEMES_SOURCE="${SCRIPT_DIR}/themes"
         fi
-        THEMES_SOURCE="${SCRIPT_DIR}/themes"
     fi
     
-    for css_file in "${THEMES_SOURCE}"/theme-*.css; do
-        if [[ -f "${THEMES_DIR}/$(basename "$css_file")" ]]; then
-            ((installed++))
-        fi
-    done
+    if [[ -n "$THEMES_SOURCE" && -d "$THEMES_SOURCE" ]]; then
+        for css_file in "${THEMES_SOURCE}"/theme-*.css; do
+            if [[ -f "${THEMES_DIR}/$(basename "$css_file")" ]]; then
+                ((installed++))
+            fi
+        done
+    fi
     echo -e "  Installed:  ${GREEN}${installed}${NC} theme(s)"
     
     # Backup status
