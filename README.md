@@ -2,29 +2,42 @@
 
 Custom themes for Proxmox VE that integrate with the native Color Theme selector.
 
-## Features
+## ✨ Features
 
 - **Native Integration** - Themes appear in Proxmox's built-in Color Theme dropdown
 - **Auto-Patch on Updates** - Automatically re-applies themes after Proxmox package updates
 - **Hybrid Engine** - CSS for styling + JavaScript for dynamic chart patching
 - **Easy Installation** - Single command installation
 
-## Screenshot
+## 📸 Screenshot
 
 Comparison between default Proxmox Dark theme and UniFi theme:
 
-![Proxmox Dark vs UniFi Theme](Screenshot.png)
+![Proxmox Dark vs UniFi Theme](screenshots/Screenshot.png)
 
-## Available Themes
+## 🎨 Themes
 
-| Theme | Description |
-|-------|-------------|
-| **UniFi** | Dark theme inspired by Ubiquiti UniFi Network Application |
-| **Github Dark** | In Progress|
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <h3>UniFi</h3>
+      <img src="screenshots/UniFi.png" alt="UniFi Theme" width="100%">
+      <br>
+      <i>Inspired by Ubiquiti UniFi Network Application</i>
+    </td>
+    <td width="50%" align="center">
+      <h3>GitHub Dark</h3>
+      <br><br>
+        <i>Screenshot Coming Soon</i>
+      <br><br>
+      <i>Based on official GitHub Dark Dimmed theme</i>
+    </td>
+  </tr>
+</table>
 
 More themes inspired by other vendor UIs are in development.
 
-## Installation
+## 🚀 Installation
 
 ### One-Liner Install
 
@@ -47,7 +60,7 @@ chmod +x install.sh
 2. Click username → Color Theme
 3. Select a ProxMorph theme
 
-## Commands
+## 💻 Commands
 
 | Command | Description |
 |---------|-------------|
@@ -55,7 +68,7 @@ chmod +x install.sh
 | `./install.sh uninstall` | Remove themes |
 | `./install.sh status` | Show installation status |
 
-## Creating Themes
+## 🛠️ Creating Themes
 
 1. Copy an existing theme from `themes/`
 2. Rename to `theme-yourname.css`
@@ -65,7 +78,7 @@ chmod +x install.sh
 
 Theme files must start with `/*!Display Name*/` - this sets the name in Proxmox's dropdown.
 
-## How It Works
+## ℹ️ How It Works
 
 1. Theme CSS files are copied to `/usr/share/javascript/proxmox-widget-toolkit/themes/`
 2. JavaScript patches (for charts) are installed to `/usr/share/pve-manager/js/proxmorph/`
@@ -73,12 +86,12 @@ Theme files must start with `/*!Display Name*/` - this sets the name in Proxmox'
 4. An apt hook automatically re-patches after `proxmox-widget-toolkit` or `pve-manager` updates
 5. Themes appear in Proxmox's native Color Theme selector
 
-## Supported Versions
+## 📦 Supported Versions
 
 - Proxmox VE 9.x
 - Proxmox VE 8.x
 
-## License
+## 📄 License
 
 MIT License
 
