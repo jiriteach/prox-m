@@ -10,7 +10,7 @@
  *   Critical:  #CC3135 (Red)
  */
 
-(function() {
+(function () {
     'use strict';
 
     const PROXMORPH_CHART_COLORS = [
@@ -72,9 +72,20 @@
     }
 
     /**
+     * Check if UniFi theme is active
+     */
+    function isUnifiThemeActive() {
+        // Check for the presence of the UniFi theme stylesheet
+        return !!document.querySelector('link[href*="theme-unifi.css"]');
+    }
+
+    /**
      * Find and patch all RRD charts on the page
      */
     function patchAllCharts() {
+        // Only patch if UniFi theme is active
+        if (!isUnifiThemeActive()) return;
+
         if (typeof Ext === 'undefined' || !Ext.ComponentQuery) return;
 
         const charts = Ext.ComponentQuery.query('proxmoxRRDChart');
@@ -91,7 +102,7 @@
         if (document.readyState === 'complete') {
             setTimeout(patchAllCharts, 500);
         } else {
-            window.addEventListener('load', function() {
+            window.addEventListener('load', function () {
                 setTimeout(patchAllCharts, 500);
             });
         }
