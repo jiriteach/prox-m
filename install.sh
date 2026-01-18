@@ -497,7 +497,7 @@ log() {
 
 # Only proceed if themes are installed
 
-if [[ ! -d "$THEMES_SOURCE" ]]; then
+if [ ! -d "$THEMES_SOURCE" ]; then
 
     exit 0
 
@@ -521,7 +521,7 @@ fi
 
 # Check if index.html.tpl needs JS patch
 
-if [[ -d "${THEMES_SOURCE}/patches" ]] && ! grep -q "$JS_PATCH_MARKER" "$INDEX_HTML_TPL" 2>/dev/null; then
+if [ -d "${THEMES_SOURCE}/patches" ] && ! grep -q "$JS_PATCH_MARKER" "$INDEX_HTML_TPL" 2>/dev/null; then
 
     needs_repatch=true
 
@@ -529,7 +529,7 @@ fi
 
 
 
-if [[ "$needs_repatch" == "true" ]]; then
+if [ "$needs_repatch" = "true" ]; then
 
     log "Detected PVE update, re-applying ProxMorph patches..."
 
@@ -539,13 +539,13 @@ if [[ "$needs_repatch" == "true" ]]; then
 
     for css_file in "${THEMES_SOURCE}"/theme-*.css; do
 
-        if [[ -f "$css_file" ]]; then
+        if [ -f "$css_file" ]; then
 
             theme_key=$(basename "$css_file" .css | sed 's/^theme-//')
 
             theme_title=$(head -1 "$css_file" | sed -n 's|^/\*!\(.*\)\*/.*|\1|p')
 
-            if [[ -z "$theme_title" ]]; then
+            if [ -z "$theme_title" ]; then
 
                 theme_title=$(echo "$theme_key" | sed 's/-/ /g' | sed 's/\b\(.\)/\u\1/g')
 
@@ -569,13 +569,13 @@ if [[ "$needs_repatch" == "true" ]]; then
 
     # Re-apply JavaScript patches
 
-    if [[ -d "${THEMES_SOURCE}/patches" ]]; then
+    if [ -d "${THEMES_SOURCE}/patches" ]; then
 
         mkdir -p "$JS_PATCHES_DIR"
 
         for js_file in "${THEMES_SOURCE}/patches"/*.js; do
 
-            if [[ -f "$js_file" ]]; then
+            if [ -f "$js_file" ]; then
 
                 cp "$js_file" "${JS_PATCHES_DIR}/"
 
@@ -591,13 +591,13 @@ if [[ "$needs_repatch" == "true" ]]; then
 
         # Patch index.html.tpl if needed
 
-        if [[ -f "$INDEX_HTML_TPL" ]] && ! grep -q "$JS_PATCH_MARKER" "$INDEX_HTML_TPL"; then
+        if [ -f "$INDEX_HTML_TPL" ] && ! grep -q "$JS_PATCH_MARKER" "$INDEX_HTML_TPL"; then
 
             script_tags="$JS_PATCH_MARKER"
 
             for js_file in "${JS_PATCHES_DIR}"/*.js; do
 
-                if [[ -f "$js_file" ]]; then
+                if [ -f "$js_file" ]; then
 
                     js_name=$(basename "$js_file")
 

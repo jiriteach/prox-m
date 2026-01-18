@@ -5,6 +5,20 @@ All notable changes to ProxMorph will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2026-01-18
+
+### Fixed
+- **Apt Hook**:
+  - Fixed `[[: not found` syntax error in `post-update.sh` by enforcing POSIX compliance (ensures compatibility with `dash`/`sh`)
+- **GitHub Dark Theme**:
+  - **Tree/Toolbox Highlights**:
+    - Ported authentic UniFi highlight mechanism (using pseudo-elements) to fix "double background" and text artifacts
+  - **Structural Alignment**:
+    - Ported UniFi border structures (radius, padding, layout) to Windows, Panels, and Fieldsets while preserving GitHub colors
+  - **Resource Tree**:
+    - Removed default blue focus borders
+    - Aligned cell padding with UniFi standards
+
 ## [2.2.0] - 2026-01-18
 
 ### Added
