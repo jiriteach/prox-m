@@ -6,7 +6,7 @@ Custom themes for Proxmox VE that integrate with the native Color Theme selector
 
 - **Native Integration** - Themes appear in Proxmox's built-in Color Theme dropdown
 - **Auto-Patch on Updates** - Automatically re-applies themes after Proxmox package updates
-- **Hybrid Engine** - CSS for styling + JavaScript for dynamic chart patching (optional)
+- **Hybrid Engine** - CSS for styling + JavaScript for dynamic chart patching
 - **Easy Installation** - Single command installation
 
 ## Screenshot
