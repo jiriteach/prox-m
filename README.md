@@ -6,7 +6,7 @@ Custom themes for Proxmox VE that integrate with the native Color Theme selector
 
 - **Native Integration** - Themes appear in Proxmox's built-in Color Theme dropdown
 - **Auto-Patch on Updates** - Automatically re-applies themes after Proxmox package updates
-- **Pure CSS** - No JavaScript required, minimal footprint
+- **Hybrid Engine** - CSS for styling + JavaScript for dynamic chart patching (optional)
 - **Easy Installation** - Single command installation
 
 ## Screenshot
@@ -68,9 +68,10 @@ Theme files must start with `/*!Display Name*/` - this sets the name in Proxmox'
 ## How It Works
 
 1. Theme CSS files are copied to `/usr/share/javascript/proxmox-widget-toolkit/themes/`
-2. `proxmoxlib.js` is patched to register themes in `theme_map`
-3. An apt hook automatically re-patches after `proxmox-widget-toolkit` updates
-4. Themes appear in Proxmox's native Color Theme selector
+2. JavaScript patches (for charts) are installed to `/usr/share/pve-manager/js/proxmorph/`
+3. `proxmoxlib.js` is patched to register themes, and `index.html.tpl` loads the JS patches
+4. An apt hook automatically re-patches after `proxmox-widget-toolkit` or `pve-manager` updates
+5. Themes appear in Proxmox's native Color Theme selector
 
 ## Supported Versions
 
