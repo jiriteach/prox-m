@@ -5,6 +5,14 @@ All notable changes to ProxMorph will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.3] - 2026-01-20
+
+### Fixed
+- **Installer**:
+  - Improved PVE version detection to report specific manager version (e.g., v9.1.4) instead of metapackage version (v9.1.0)
+  - Suppressed misleading "Themes directory not found" error during one-liner (`curl | bash`) installations
+  - Added robust guards for script path detection via `BASH_SOURCE`
+
 ## [2.2.2] - 2026-01-20
 
 ### Added

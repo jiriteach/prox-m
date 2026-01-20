@@ -32,7 +32,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 
-VERSION="2.2.2"
+VERSION="2.2.3"
 
 WIDGET_TOOLKIT_DIR="/usr/share/javascript/proxmox-widget-toolkit"
 
@@ -136,7 +136,7 @@ check_pve() {
 
         PRODUCT="PVE"
 
-        PRODUCT_VERSION=$(pveversion --verbose | head -1)
+        PRODUCT_VERSION=$(pveversion | head -1)
 
         INDEX_TEMPLATE="$PVE_INDEX_TPL"
 
@@ -719,17 +719,15 @@ get_themes_source() {
     
 
     # 2. Check script directory
-
-    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd 2>/dev/null)"
+    local script_dir=""
+    if [[ -n "${BASH_SOURCE[0]}" ]]; then
+        script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd 2>/dev/null)"
+    fi
 
     # Handle piped execution where BASH_SOURCE might be /dev/fd/*
-
     if [[ -n "$script_dir" && "$script_dir" != /dev/fd* && "$script_dir" != /proc/* && -d "${script_dir}/themes" ]]; then
-
         echo "${script_dir}/themes"
-
         return 0
-
     fi
 
     
@@ -754,9 +752,7 @@ install_themes() {
 
     if [[ -z "$themes_source" ]]; then
 
-        print_error "Themes directory not found"
-
-        print_info "Attempting to download latest release..."
+        print_info "Local themes not found, attempting to download latest release..."
 
         download_release
 
