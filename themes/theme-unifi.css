@@ -2,7 +2,7 @@
 /*
  * ProxMorph Theme: UniFi
  * Authentic recreation of Ubiquiti UniFi Network Application UI
- * Version: 5.84
+ * Version: 5.87
  * Author: N.E.S.T. / Dr. Dranglog
  * 
  * UniFi Color Palette (extracted from live instance):
@@ -201,97 +201,31 @@ th,
 .x-window {
     border-radius: 8px !important;
     overflow: hidden !important;
-    /* v5.87: Removed min-width:295px - let ExtJS size windows naturally based on content */
+    min-width: 295px !important;
+    /* v5.85: Match Proxmox default to prevent scrollbars */
 }
 
-/* v5.87: Only header needs width:100% - body uses auto to prevent scrollbar issues
-   Root cause: width:100% on body elements causes scrollbars when combined with borders/padding */
-.x-window>.x-window-header {
+/* v5.86: Fix dialog header/body not matching dialog width when min-width is applied
+   Root cause: ExtJS sets inline width on header/body that's smaller than min-width forces.
+   Solution: Force header/body to use 100% width so they inherit parent's computed width. */
+.x-window > .x-window-header,
+.x-window > .x-window-body,
+.x-window > .x-window-bodyWrap,
+.x-window-bodyWrap > .x-window-body {
     width: 100% !important;
-}
-
-/* Body elements use auto width - let ExtJS handle sizing naturally */
-.x-window>.x-window-body,
-.x-window>.x-window-bodyWrap,
-.x-window-bodyWrap>.x-window-body {
-    width: auto !important;
-}
-
-/* v5.87: Message box dialog fixes */
-.x-message-box {
-    min-width: 262px !important;
-}
-
-.x-message-box .x-window-body {
-    background-color: var(--pm-bg-base) !important;
-    overflow: hidden !important;
-    height: auto !important;
-}
-
-/* Message box checkbox alignment - ensure inline display */
-.x-message-box .x-form-type-checkbox {
-    position: relative !important;
-    top: auto !important;
-    margin-top: 16px !important;
-}
-
-.x-message-box .x-form-cb-wrap-inner {
-    display: flex !important;
-    align-items: center !important;
-}
-
-.x-message-box .x-form-cb-label {
-    white-space: nowrap !important;
-    margin-left: 2px !important;
-    font-size: 12px !important;
-    letter-spacing: -0.2px !important;
-    padding-right: 0 !important;
-}
-
-.x-message-box .x-form-item-body {
-    padding: 0 !important;
 }
 
 /* Ensure box containers inside header use full width */
-.x-window-header>.x-box-inner {
+.x-window-header > .x-box-inner,
+.x-window-header > .x-box-inner > .x-box-target {
     width: 100% !important;
 }
 
-/* v5.87: Layout fix for window header - properly align close tool to right 
-   Using flexbox on the inner target allows title to grow and pushes tool to the end.
-   We must override ExtJS absolute positioning (top/left) for this to work. */
-.x-window-header .x-box-target {
-    width: 100% !important;
-    display: flex !important;
-    align-items: center !important;
-}
-
+/* Header title should expand appropriately */
 .x-window-header-title {
-    position: relative !important;
-    left: auto !important;
-    top: auto !important;
     width: auto !important;
     flex: 1 !important;
-}
-
-.x-window-header .x-tool {
-    position: relative !important;
-    left: auto !important;
-    top: auto !important;
-    margin-left: 8px !important;
-}
-
-/* v5.88: Fix alignment of "More" button in Guest Summary Panel.
-   By default it floats to the right or gets misaligned. We force it to the left 
-   of its container to sit next to the "IPs" label. */
-div[id^="pveGuestSummary"] .x-container .x-btn:not(.x-toolbar-item):not(.x-segmented-button-item) {
-    position: absolute !important;
-    left: 10px !important;
-    top: 0 !important;
-    right: auto !important;
-    bottom: auto !important;
-    margin: 0 !important;
-    transform: translateY(4px) !important;
+    max-width: calc(100% - 30px) !important;
 }
 
 /* 3. Window header - top corners only */
@@ -618,10 +552,21 @@ i.pmx-itype-icon-memory::before,
     font-size: 14px !important;
 }
 
-/* v5.40: Fix "More" button position in IPs section of Summary panel
-   Move button next to "IPs" label, vertically centered with IP addresses */
+/* v5.87: Fix "More" button position in IPs section of Summary panel
+   Move button next to "IPs" label, vertically centered with IP addresses.
+   Parent containers need overflow:visible because transform moves button outside bounds.
+   
+   Key insight: ExtJS sets button's `top` based on container height (17px for 1 IP, 34px for 2 IPs).
+   Solution: Anchor to top: 0, then use consistent transform for fine positioning.
+   This works regardless of how many IP addresses are displayed. */
+[id^="pveIPViewLXC-"] .x-box-inner,
+[id^="pveIPViewLXC-"] > .x-box-inner {
+    overflow: visible !important;
+}
+
 [id^="pveIPViewLXC-"] [id^="button-"].x-btn {
-    transform: translate(-320px, -29px) !important;
+    top: 0 !important;
+    transform: translate(-430px, 5px) !important;
 }
 
 /* Cell inner content alignment */
@@ -1842,10 +1787,12 @@ div[id^="pveResourceTree-"][id$="-body"] {
     border-radius: 4px !important;
 }
 
-/* v5.83: Fix horizontal scrollbar in resource tree
+/* v5.84: Fix horizontal scrollbar in resource tree
    ExtJS sets inline 'overflow: hidden auto' which causes 1px horizontal scroll.
-   Force overflow-x: hidden while preserving vertical scroll. */
-[id^="pveResourceTree"] .x-tree-view {
+   Force overflow-x: hidden while preserving vertical scroll.
+   Note: Must use .x-fit-item compound selector to win over rule at line ~3365 */
+[id^="pveResourceTree"] .x-tree-view,
+[id^="pveResourceTree"] .x-tree-view.x-fit-item {
     overflow-x: hidden !important;
 }
 
@@ -2544,6 +2491,11 @@ a:hover {
 
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(249, 250, 250, 0.07);
+}
+
+/* v5.84: Style scrollbar corner to match theme (eliminates white square) */
+::-webkit-scrollbar-corner {
+    background-color: #131416;
 }
 
 /* =====================================================
@@ -3404,11 +3356,10 @@ svg.x-surface {
 }
 
 /* =====================================================
-   v5.35 FIX: Reposition "More" button in IPs section
-   Move button next to "IPs" label for better accessibility
-   Center label and button vertically with IP addresses content
+   v5.35 FIX: Center "IPs" label vertically with IP addresses
+   Works together with v5.87 button repositioning
    ===================================================== */
-/* IPs label - center vertically with IP addresses */
+/* IPs label container - translate down 9px for vertical centering */
 [id^="pveIPViewLXC-"]>.x-box-inner>.x-box-target>[id^="box-"] {
     transform: translateY(9px) !important;
 }
@@ -3715,4 +3666,179 @@ body .x-window .x-panel .x-panel-bodyWrap>.x-tab-bar+.x-panel-body.x-panel-body-
 .x-window[id^="pveQemuCreateWizard"] .x-panel-body {
     width: 100% !important;
     box-sizing: border-box !important;
+}
+
+/* =====================================================
+   v5.86: TOOL ICONS - FontAwesome Replacements
+   Replace sprite-based ExtJS tool icons with crisp
+   FontAwesome icons for better consistency and clarity
+   ===================================================== */
+
+/* Base styling for all tool icons - remove sprite backgrounds */
+.x-tool-tool-el.x-tool-minus,
+.x-tool-img.x-tool-minus,
+.x-tool-tool-el.x-tool-collapse-right,
+.x-tool-img.x-tool-collapse-right,
+.x-tool-tool-el.x-tool-collapse-left,
+.x-tool-img.x-tool-collapse-left,
+.x-tool-tool-el.x-tool-expand-right,
+.x-tool-img.x-tool-expand-right,
+.x-tool-tool-el.x-tool-expand-left,
+.x-tool-img.x-tool-expand-left,
+.x-tool-tool-el.x-tool-maximize,
+.x-tool-img.x-tool-maximize,
+.x-tool-tool-el.x-tool-restore,
+.x-tool-img.x-tool-restore,
+.x-tool-tool-el.x-tool-gear,
+.x-tool-img.x-tool-gear,
+.x-tool-tool-el.x-tool-refresh,
+.x-tool-img.x-tool-refresh {
+    background-image: none !important;
+    font-family: "FontAwesome" !important;
+    font-size: 14px !important;
+    line-height: 16px !important;
+    text-align: center !important;
+    color: #737C87 !important;
+    transition: color 0.15s ease !important;
+    filter: none !important;
+    width: 16px !important;
+    height: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Undo Zoom button (minus icon) - use zoom-out icon */
+.x-tool-tool-el.x-tool-minus::before,
+.x-tool-img.x-tool-minus::before {
+    content: "\f010" !important;  /* fa-search-minus (zoom out) */
+}
+
+/* Collapse right - single chevron pointing right (>)
+   Panel is expanded, clicking will collapse it to the right */
+.x-tool-tool-el.x-tool-collapse-right::before,
+.x-tool-img.x-tool-collapse-right::before {
+    content: "\f054" !important;  /* fa-chevron-right (>) */
+}
+
+/* Expand left - single chevron pointing left (<)
+   Panel is collapsed on right, clicking will expand it to the left */
+.x-tool-tool-el.x-tool-expand-left::before,
+.x-tool-img.x-tool-expand-left::before {
+    content: "\f053" !important;  /* fa-chevron-left (<) */
+}
+
+/* Collapse left - single chevron pointing left (<)
+   Panel is expanded, clicking will collapse it to the left */
+.x-tool-tool-el.x-tool-collapse-left::before,
+.x-tool-img.x-tool-collapse-left::before {
+    content: "\f053" !important;  /* fa-chevron-left (<) */
+}
+
+/* Expand right - single chevron pointing right (>)
+   Panel is collapsed on left, clicking will expand it to the right */
+.x-tool-tool-el.x-tool-expand-right::before,
+.x-tool-img.x-tool-expand-right::before {
+    content: "\f054" !important;  /* fa-chevron-right (>) */
+}
+
+/* Maximize (expand icon) */
+.x-tool-tool-el.x-tool-maximize::before,
+.x-tool-img.x-tool-maximize::before {
+    content: "\f065" !important;  /* fa-expand */
+}
+
+/* Restore (compress icon) */
+.x-tool-tool-el.x-tool-restore::before,
+.x-tool-img.x-tool-restore::before {
+    content: "\f066" !important;  /* fa-compress */
+}
+
+/* Gear/Settings icon */
+.x-tool-tool-el.x-tool-gear::before,
+.x-tool-img.x-tool-gear::before {
+    content: "\f013" !important;  /* fa-cog */
+}
+
+/* Refresh icon */
+.x-tool-tool-el.x-tool-refresh::before,
+.x-tool-img.x-tool-refresh::before {
+    content: "\f021" !important;  /* fa-refresh */
+}
+
+/* Hover state - all tool icons */
+.x-tool:hover .x-tool-tool-el.x-tool-minus,
+.x-tool:hover .x-tool-img.x-tool-minus,
+.x-tool:hover .x-tool-tool-el.x-tool-collapse-right,
+.x-tool:hover .x-tool-img.x-tool-collapse-right,
+.x-tool:hover .x-tool-tool-el.x-tool-collapse-left,
+.x-tool:hover .x-tool-img.x-tool-collapse-left,
+.x-tool:hover .x-tool-tool-el.x-tool-expand-right,
+.x-tool:hover .x-tool-img.x-tool-expand-right,
+.x-tool:hover .x-tool-tool-el.x-tool-expand-left,
+.x-tool:hover .x-tool-img.x-tool-expand-left,
+.x-tool:hover .x-tool-tool-el.x-tool-maximize,
+.x-tool:hover .x-tool-img.x-tool-maximize,
+.x-tool:hover .x-tool-tool-el.x-tool-restore,
+.x-tool:hover .x-tool-img.x-tool-restore,
+.x-tool:hover .x-tool-tool-el.x-tool-gear,
+.x-tool:hover .x-tool-img.x-tool-gear,
+.x-tool:hover .x-tool-tool-el.x-tool-refresh,
+.x-tool:hover .x-tool-img.x-tool-refresh {
+    color: #DEE0E3 !important;
+}
+
+/* Disabled state */
+.x-tool-disabled .x-tool-tool-el,
+.x-tool-disabled .x-tool-img {
+    opacity: 0.4 !important;
+    cursor: default !important;
+}
+
+/* =====================================================
+   v5.86: GENERIC TOOL ICONS (Inline FontAwesome)
+   Some ExtJS tools use inline style="font-family:FontAwesome"
+   with text content for their icons instead of ::before
+   ===================================================== */
+
+/* Style generic tools that use text content with FontAwesome */
+.x-tool-tool-el[style*="font-family:FontAwesome"],
+.x-tool-tool-el[style*="font-family: FontAwesome"] {
+    color: #737C87 !important;
+    font-size: 14px !important;
+    line-height: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 16px !important;
+    height: 16px !important;
+    transition: color 0.15s ease !important;
+    background-image: none !important;
+    background-color: transparent !important;
+}
+
+/* Enabled state - pointer cursor */
+.x-tool:not(.x-tool-disabled) .x-tool-tool-el[style*="font-family:FontAwesome"],
+.x-tool:not(.x-tool-disabled) .x-tool-tool-el[style*="font-family: FontAwesome"] {
+    cursor: pointer !important;
+}
+
+/* Disabled state - default cursor and reduced opacity */
+.x-tool.x-tool-disabled .x-tool-tool-el[style*="font-family:FontAwesome"],
+.x-tool.x-tool-disabled .x-tool-tool-el[style*="font-family: FontAwesome"] {
+    cursor: default !important;
+    opacity: 0.4 !important;
+}
+
+/* Fix mask overlay on tool icons - transparent and non-blocking */
+.x-tool .x-mask {
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    pointer-events: none !important;
+}
+
+/* Hover state for enabled generic tools */
+.x-tool:not(.x-tool-disabled):hover .x-tool-tool-el[style*="font-family:FontAwesome"],
+.x-tool:not(.x-tool-disabled):hover .x-tool-tool-el[style*="font-family: FontAwesome"] {
+    color: #DEE0E3 !important;
 }

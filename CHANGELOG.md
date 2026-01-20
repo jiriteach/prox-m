@@ -5,7 +5,7 @@ All notable changes to ProxMorph will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.2.1] - 2026-01-18
+## [2.2.1] - 2026-01-20
 
 ### Fixed
 - **Apt Hook**:
@@ -18,6 +18,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Resource Tree**:
     - Removed default blue focus borders
     - Aligned cell padding with UniFi standards
+- **UniFi Theme (v5.85)**:
+  - Fixed horizontal scrollbar in resource tree (1px overflow caused by CSS specificity conflict)
+  - Added scrollbar corner styling to eliminate white square artifact at corner intersection
+- **UniFi Theme (v5.87)**:
+  - Fixed "More" button position in IPs section of Summary panel for variable IP count
+  - Button now correctly positioned next to "IPs" label regardless of whether 1, 2, or more IPs are displayed
+  - Root cause: ExtJS dynamically sets button's `top` based on container height
+  - Solution: Anchor to `top: 0` then use consistent transform for fine positioning
+  - Added overflow:visible to parent containers to prevent clipping
+
+### Added
+- **UniFi Theme (v5.86)**:
+  - Replaced sprite-based ExtJS tool icons with crisp FontAwesome icons:
+    - Zoom out (undo zoom), collapse/expand panel chevrons
+    - Maximize/restore window icons
+    - Gear (settings) and refresh icons
+  - Distinct icons for collapse vs expand states (chevron direction indicates action)
+  - Added styling for generic inline FontAwesome tool icons (e.g., "Reset form data" button)
+  - Fixed disabled tool icon mask overlay (transparent background, non-blocking pointer events)
+- **Chart Hover Dots**:
+  - Added subtle white border (1px) to chart data point dots when hovered
+  - Improves visibility of hover state against colored fills
 
 ## [2.2.0] - 2026-01-18
 

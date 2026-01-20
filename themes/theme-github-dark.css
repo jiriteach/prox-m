@@ -2,8 +2,13 @@
 /*
  * ProxMorph Theme: GitHub Dark
  * Authentic recreation of GitHub's Dark Mode using Primer Design System
- * Version: 2.1.3
+ * Version: 2.2.1
  * 
+ * v2.2.1: Remove blue outline from selected/focused items in resource tree
+ *         Add borders to Guest Status panel and Notes panel
+ * v2.2.0: Dialog form content padding - prevent content flushing against edges
+ * v2.1.5: Ported layout container reset rules from UniFi theme (prevent ExtJS clipping)
+ * v2.1.4: Fixed toolbox tree item text overlapping icons (margin-left: 28px)
  * v2.1.3: Toolbox tree active item uses GitHub green instead of blue
  * v2.1.2: Vertical usage bars (storage progress) use Proxmox default color #e6e6e6
  * v2.1.1: Resource tree icons use Proxmox default colors (green=running, red=error, etc.)
@@ -106,6 +111,178 @@ body.x-border-layout-ct,
 div.x-border-layout-ct {
     background-color: var(--gh-canvas-default) !important;
     color: var(--gh-fg-default) !important;
+}
+
+/* =====================================================
+   LAYOUT CONTAINER RESET (Prevent ExtJS clipping)
+   v2.1.5: Ported from UniFi theme for consistent border handling
+   ===================================================== */
+
+/* Tool icons - no rounded corners */
+.x-tool,
+.x-tool-tool-el,
+.x-tool-default,
+.x-tool-img {
+    border-radius: 0 !important;
+}
+
+/* Form elements - exclude from global radius, apply 6px (GitHub style) */
+.x-form-item,
+.x-form-item-default,
+.x-form-item-body,
+.x-form-item-body-default,
+.x-form-text-field-body,
+.x-form-text-field-body-default,
+.x-form-fieldcontainer,
+.x-field,
+.x-field-default,
+.x-form-type-text {
+    border-radius: 0 !important;
+}
+
+/* Reset layout containers that clip elements with overflow:hidden + radius */
+.x-box-layout-ct,
+.x-panel-bodyWrap,
+.x-panel-bodyWrap-default,
+.x-autocontainer-innerCt,
+.x-autocontainer-outerCt,
+.x-panel.x-tabpanel-child,
+.x-panel.x-box-item,
+.x-box-inner,
+.x-box-target,
+.x-container,
+.x-container-default,
+.x-window .x-panel-body,
+.x-window .x-window-body,
+.x-window .x-window-bodyWrap {
+    border-radius: 0 !important;
+}
+
+/* Reset everything inside windows to 0 - then re-apply specific radii */
+.x-window *,
+.x-window .x-autocontainer-innerCt,
+.x-window .x-autocontainer-outerCt,
+.x-window .x-form-layout-wrap,
+.x-window .x-form-layout-auto-label,
+.x-window .x-form-layout-colgroup,
+.x-window .x-form-layout-column,
+.x-window .x-field,
+.x-window .x-form-item,
+.x-window .x-form-item-body {
+    border-radius: 0 !important;
+}
+
+/* v2.2.0: Dialog form content padding - prevent content flushing against edges */
+.x-window .x-tabpanel-child .x-autocontainer-innerCt {
+    padding: 12px 16px !important;
+}
+
+/* Re-apply button styling inside windows (6px) */
+.x-window .x-btn {
+    border-radius: var(--gh-radius-md) !important;
+}
+
+/* Re-apply checkbox styling inside windows */
+.x-window .x-form-checkbox {
+    border-radius: var(--gh-radius-sm) !important;
+}
+
+/* Re-apply form inputs inside windows (6px with split corners) */
+.x-window .x-form-trigger-wrap,
+.x-window .x-form-trigger-wrap-default {
+    border-radius: var(--gh-radius-md) !important;
+}
+
+.x-window .x-form-text-wrap,
+.x-window .x-form-text {
+    border-radius: var(--gh-radius-md) 0 0 var(--gh-radius-md) !important;
+}
+
+.x-window .x-form-arrow-trigger {
+    border-radius: 0 var(--gh-radius-md) var(--gh-radius-md) 0 !important;
+}
+
+/* Form trigger/text wrap - reset and re-apply */
+.x-form-trigger-wrap,
+.x-form-trigger-wrap *,
+.x-form-text-wrap,
+.x-form-text-wrap *,
+.x-form-text,
+.x-form-trigger {
+    border-radius: 0 !important;
+}
+
+.x-form-trigger-wrap,
+.x-form-trigger-wrap-default {
+    border-radius: var(--gh-radius-md) !important;
+    overflow: hidden !important;
+}
+
+.x-form-text-wrap,
+.x-form-text-wrap-default {
+    border-radius: var(--gh-radius-md) 0 0 var(--gh-radius-md) !important;
+}
+
+.x-form-text,
+.x-form-text-default {
+    border-radius: var(--gh-radius-md) 0 0 var(--gh-radius-md) !important;
+}
+
+.x-form-trigger,
+.x-form-trigger-default,
+.x-form-arrow-trigger,
+.x-form-arrow-trigger-default {
+    border-radius: 0 var(--gh-radius-md) var(--gh-radius-md) 0 !important;
+}
+
+/* Legend items - no rounded corners */
+.x-legend-container,
+.x-legend-horizontal .x-legend-item,
+.x-legend-item {
+    border-radius: 0 !important;
+}
+
+/* Legend color marker (dot) - keep circular */
+.x-legend-item-marker {
+    border-radius: 50% !important;
+}
+
+/* Boundlist - prevent clipping (applied to parent) */
+.x-boundlist {
+    border-radius: var(--gh-radius-lg) !important;
+    overflow: hidden !important;
+}
+
+/* Chart canvas - no rounded corners on data area */
+.x-chart-grid,
+.x-chart-axis,
+canvas.x-surface,
+.x-chart canvas {
+    border-radius: 0 !important;
+}
+
+/* Constrain autocontainer width inside windows */
+.x-window .x-autocontainer-outerCt {
+    max-width: 100% !important;
+}
+
+/* Fix window header/body width consistency */
+.x-window > .x-window-header,
+.x-window > .x-window-body,
+.x-window > .x-window-bodyWrap,
+.x-window-bodyWrap > .x-window-body {
+    width: 100% !important;
+}
+
+.x-window-header > .x-box-inner,
+.x-window-header > .x-box-inner > .x-box-target {
+    width: 100% !important;
+}
+
+.x-window-header-title {
+    width: auto !important;
+    flex: 1 !important;
+    max-width: calc(100% - 30px) !important;
 }
 
 /* =====================================================
@@ -328,6 +505,15 @@ div.x-border-layout-ct {
     overflow: hidden !important;
 }
 
+/* v2.2.1: Guest status panel and Notes panel borders */
+[id^="pveGuestStatusView-"].x-panel,
+[id^="pveLxcStatusView-"].x-panel,
+[id^="pveQemuStatusView-"].x-panel,
+[id^="pmxNotesView-"].x-panel {
+    border: 1px solid var(--gh-border-default) !important;
+    border-radius: var(--gh-radius-lg) !important;
+}
+
 .x-panel-body,
 .x-panel-body-default {
     background-color: var(--gh-canvas-default) !important;
@@ -489,8 +675,7 @@ div[id^="pveResourceTree"] .x-grid-cell {
 
 .x-btn-default-toolbar-small .x-btn-inner-default-toolbar-small,
 .x-btn-default-toolbar-small .x-btn-icon-el-default-toolbar-small {
-    color: #f0f6fc !important;
-    /* GitHub Primer default button text color */
+    color: #f0f6fc !important; /* GitHub Primer default button text color */
 }
 
 .x-btn-default-toolbar-small .x-btn-wrap-default-toolbar-small.x-btn-arrow-right::after,
@@ -642,8 +827,7 @@ div[id^="pveResourceTree"] .x-grid-cell {
 }
 
 .x-grid-item-alt {
-    background-color: #0b0f14 !important;
-    /* Slightly darker than canvas-default */
+    background-color: #0b0f14 !important; /* Slightly darker than canvas-default */
 }
 
 .x-grid-with-row-lines .x-grid-item {
@@ -698,8 +882,16 @@ div[id^="pveResourceTree"] .x-grid-cell {
     color: var(--gh-fg-on-emphasis) !important;
 }
 
-.x-keyboard-mode .x-grid-item-focused .x-grid-cell-inner::before {
-    border-color: var(--gh-accent-emphasis) !important;
+/* v2.2.1: Remove blue outline from selected/focused items in resource tree */
+.x-keyboard-mode .x-grid-item-focused .x-grid-cell-inner::before,
+.x-keyboard-mode .x-grid-item-selected .x-grid-cell-inner::before,
+.x-grid-item-selected .x-grid-cell-inner::before,
+.x-grid-item-focused .x-grid-cell-inner::before,
+[id^="pveResourceTree"] .x-grid-item-selected .x-grid-cell-inner::before,
+[id^="pveResourceTree"] .x-grid-item-focused .x-grid-cell-inner::before {
+    content: none !important;
+    display: none !important;
+    border: none !important;
 }
 
 .x-grid-empty {
@@ -882,13 +1074,17 @@ div[id^="pveResourceTree"] .x-grid-cell {
     border-radius: var(--gh-radius-md) !important;
 }
 
+/* v2.1.4: Fix toolbox tree item text overlapping icons (icon is 24px absolute positioned) */
+.x-treelist-item-text {
+    margin-left: 28px !important;
+}
+
 /* Toolbox tree items - increased visibility */
 .x-treelist-item-text,
 .x-treelist-item-icon,
 .x-treelist.x-treelist-pve-nav .x-treelist-item-text,
 .x-treelist.x-treelist-pve-nav .x-treelist-item-icon {
-    color: #b1bac4 !important;
-    /* Brighter than --gh-fg-muted */
+    color: #b1bac4 !important; /* Brighter than --gh-fg-muted */
 }
 
 .x-treelist-row-over,
@@ -1136,294 +1332,4 @@ div.x-datepicker-date:hover {
    ===================================================== */
 .usage {
     background-color: #e6e6e6 !important;
-}
-
-/* =====================================================
-   RESOURCE TREE FIXES
-   Remove blue borders/outlines on selection and focus
-   ===================================================== */
-.x-tree-view .x-grid-item-selected .x-grid-cell-inner::before,
-.x-tree-view .x-grid-item-selected .x-grid-cell-inner-treecolumn::before,
-.x-tree-view .x-grid-item-focused .x-grid-cell-inner::before,
-.x-tree-view .x-grid-item:focus .x-grid-cell-inner::before,
-.x-tree-view .x-grid-item:active .x-grid-cell-inner::before {
-    border: none !important;
-    border-color: transparent !important;
-}
-
-.x-tree-view .x-grid-item:focus,
-.x-tree-view .x-grid-item-focused,
-.x-tree-view .x-grid-cell-inner:focus,
-.x-tree-view .x-grid-cell:focus,
-.x-tree-view :focus,
-.x-tree-view :focus-visible,
-.x-tree-view .x-grid-item:active,
-.x-tree-view .x-grid-cell-inner:active {
-    border-color: transparent !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-/* =====================================================
-   ROUNDED CORNERS PORT (From UniFi Theme)
-   Authentic 8px radius and consistent modal styling
-   ===================================================== */
-.x-border-box,
-.x-border-box * {
-    border-radius: 8px;
-}
-
-/* Remove rounded corners from grids/tables/lists */
-.x-grid,
-.x-grid *,
-.x-grid-header-ct,
-.x-grid-header-ct *,
-.x-grid-view,
-.x-grid-view *,
-.x-column-header,
-.x-column-header *,
-.x-grid-item,
-.x-grid-cell,
-.x-grid-cell-inner,
-.x-grid-row,
-table,
-table *,
-tr,
-td,
-th,
-.x-legend,
-.x-legend *,
-.x-tool,
-.x-tool-tool-el,
-.x-tool-img {
-    border-radius: 0 !important;
-}
-
-/* Form elements - exclude from global 8px */
-.x-form-item,
-.x-form-item-default,
-.x-form-item-body,
-.x-form-item-body-default,
-.x-form-text-field-body,
-.x-form-text-field-body-default,
-.x-form-fieldcontainer,
-.x-field,
-.x-field-default,
-.x-form-type-text {
-    border-radius: 0 !important;
-}
-
-/* Reset layout containers */
-.x-box-layout-ct,
-.x-panel-bodyWrap,
-.x-panel-bodyWrap-default,
-.x-autocontainer-innerCt,
-.x-autocontainer-outerCt,
-.x-panel.x-tabpanel-child,
-.x-panel.x-box-item,
-.x-box-inner,
-.x-box-target,
-.x-container,
-.x-container-default,
-.x-window .x-panel-body,
-.x-window .x-window-body {
-    border-radius: 0 !important;
-}
-
-/* WINDOW/MODAL CONSISTENCY */
-.x-window *,
-.x-window .x-autocontainer-innerCt,
-.x-window .x-form-layout-wrap {
-    border-radius: 0 !important;
-}
-
-.x-window {
-    border-radius: 8px !important;
-    overflow: hidden !important;
-}
-
-.x-window-header {
-    border-radius: 8px 8px 0 0 !important;
-}
-
-/* Buttons inside windows */
-.x-window .x-btn {
-    border-radius: 6px !important;
-}
-
-/* Inputs inside windows */
-.x-window .x-form-trigger-wrap,
-.x-window .x-form-text-wrap,
-.x-window .x-form-text {
-    border-radius: 4px !important;
-}
-
-/* =====================================================
-   TOOLBOX / TREELIST & STRUCTURAL FIXES (UniFi Structure V7)
-   - Exact UniFi spacing (28px height, 4px/2px margins)
-   - 4px Border Radius (UniFi Authentic)
-   - Structural Borders (Windows, Panels, Fieldsets) match UniFi geometry
-   - GitHub Theme Colors Preserved
-   ===================================================== */
-
-/* 1. GLOBAL RESET & CLEANUP */
-.x-treelist-item,
-.x-treelist-row,
-.x-treelist-item-wrap,
-.x-treelist-item-text,
-.x-treelist-item-icon,
-.x-treelist-item-tool,
-.x-treelist-item-expander {
-    background: none !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-    border: none !important;
-}
-
-/* 2. AGGRESSIVE BACKGROUND REMOVAL (Text/Icon) */
-.x-treelist-item:hover .x-treelist-item-text,
-.x-treelist-item:hover .x-treelist-item-icon,
-.x-treelist-item-over .x-treelist-item-text,
-.x-treelist-item-over .x-treelist-item-icon,
-.x-treelist-item-selected:hover .x-treelist-item-text,
-.x-treelist-item-selected:hover .x-treelist-item-icon,
-.x-treelist-item-selected .x-treelist-item-text,
-.x-treelist-item-selected .x-treelist-item-icon {
-    background: none !important;
-    background-color: transparent !important;
-}
-
-/* 3. UNIFI POSITIONING & DIMENSIONS */
-.x-treelist-item,
-.x-treelistitem {
-    min-height: 28px !important;
-    height: auto !important;
-}
-
-.x-treelist-row {
-    min-height: 28px !important;
-    padding: 2px 0 !important;
-    margin-right: 4px !important;
-    /* Authentic UniFi spacing */
-    margin-left: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    position: relative !important;
-    z-index: 1 !important;
-}
-
-/* Vertical spacing between items */
-.x-treelist-pve-nav .x-treelist-row {
-    margin-top: 2px !important;
-}
-
-/* 4. UNIFI-STYLE PSEUDO-ELEMENT HIGHLIGHT */
-.x-treelist-row::before {
-    content: '' !important;
-    display: block !important;
-    position: absolute !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
-
-    border-radius: 4px !important;
-    /* Authentic UniFi Radius */
-
-    background-color: transparent !important;
-    z-index: -1 !important;
-    transition: background-color 0.1s ease !important;
-}
-
-/* HOVER STATE (Row only) */
-.x-treelist-row:hover::before {
-    background-color: var(--gh-hover-overlay) !important;
-}
-
-/* SELECTED STATE (Row only) */
-.x-treelist-item-selected>.x-treelist-row::before {
-    background-color: var(--gh-accent-subtle) !important;
-}
-
-/* 5. CONTENT ALIGNMENT */
-.x-treelist-item-text {
-    line-height: 24px !important;
-    display: flex !important;
-    align-items: center !important;
-    margin-left: 6px !important;
-}
-
-.x-treelist-item-icon {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 24px !important;
-}
-
-/* TEXT COLORS */
-.x-treelist-item-selected>.x-treelist-row .x-treelist-item-text,
-.x-treelist-item-selected>.x-treelist-row .x-treelist-item-icon {
-    color: var(--gh-fg-default) !important;
-    font-weight: 500 !important;
-}
-
-/* =====================================================
-   STRUCTURAL BORDERS (UniFi Geometry + GitHub Colors)
-   ===================================================== */
-
-/* Windows: 8px radius, 1px border */
-.x-window-default {
-    border: 1px solid var(--gh-border-default) !important;
-    border-radius: 8px !important;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2) !important;
-}
-
-/* Panels (Framed): 12px radius, 1px border */
-.x-panel-default-framed,
-.x-panel-body-default-framed,
-.pveStatusPanel,
-.pve-summary-status {
-    border: 1px solid var(--gh-border-default) !important;
-    border-radius: 12px !important;
-}
-
-/* Panel Headers: Radius top only */
-.x-panel-header-default-framed {
-    border-bottom: 1px solid var(--gh-border-default) !important;
-    border-radius: 12px 12px 0 0 !important;
-    border-width: 0 0 1px 0 !important;
-}
-
-/* Grids inside panels: 12px radius */
-.pve-info-grid,
-.x-panel-default .x-grid {
-    border-radius: 12px !important;
-}
-
-/* Fieldsets: 8px radius, 12px padding */
-.x-fieldset {
-    border: 1px solid var(--gh-border-default) !important;
-    border-radius: 8px !important;
-    padding: 12px !important;
-}
-
-/* Usage Wrappers: 2px radius */
-.usage-wrapper {
-    border-radius: 2px !important;
-    border: 1px solid var(--gh-border-default) !important;
-}
-
-/* Resource Tree Spacing */
-.x-tree-cell,
-.x-grid-cell-treecolumn {
-    padding: 0px 8px !important;
-}
-
-/* Pointer cursor on tree items */
-.x-tree-node-text,
-.x-grid-item,
-.x-tree-elbow-img,
-.x-tree-icon {
-    cursor: pointer !important;
 }

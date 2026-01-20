@@ -2,6 +2,11 @@
  * ProxMorph Chart Patcher
  * Applies custom colors to Proxmox RRD charts
  * 
+ * Features:
+ *   - Custom UniFi color palette for chart lines/areas
+ *   - Special handling for Network Traffic (blue/green layering)
+ *   - Subtle white border on hover dots for visibility
+ * 
  * Color Palette:
  *   Primary:   #30AD55 (UniFi green)
  *   Secondary: #006EFF (UniFi blue)
@@ -52,6 +57,13 @@
                             lineWidth: 2
                         });
                     }
+                    // Add subtle white border to hover dots
+                    s.setHighlight({
+                        opacity: 1,
+                        scaling: 1.5,
+                        strokeStyle: '#FFFFFF',
+                        lineWidth: 1
+                    });
                 });
             } else {
                 // Standard color application for all other charts
@@ -61,6 +73,13 @@
                     s.setStyle({
                         fillStyle: color,
                         strokeStyle: color
+                    });
+                    // Add subtle white border to hover dots
+                    s.setHighlight({
+                        opacity: 1,
+                        scaling: 1.5,
+                        strokeStyle: '#FFFFFF',
+                        lineWidth: 1
                     });
                 });
             }
