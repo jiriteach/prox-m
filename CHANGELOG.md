@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.4] - 2026-01-21
+
 ### Fixed
+- **Installer**:
+  - Fixed `sed` delimiter issue during uninstall that caused "extra characters after command" error (PR #6 by @jiriteach)
+  - Root cause: Marker text `<!-- /ProxMorph JS Patches -->` contained `/` which conflicted with sed's default delimiter
+  - Solution: Use `|` as alternate delimiter and properly escape special regex characters
 - **UniFi Theme (v5.88)**:
   - Fixed "Finish Edit" checkmark button appearing on tags when not in edit mode
   - Root cause: `.x-btn-default-small { display: flex !important }` overrode Proxmox's inline `display: none`
