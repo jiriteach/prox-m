@@ -2,8 +2,20 @@
 /*
  * ProxMorph Theme: GitHub Dark
  * Authentic recreation of GitHub's Dark Mode using Primer Design System
- * Version: 2.2.1
+ * Version: 2.2.14
  * 
+ * v2.2.14: Force dropdown icons left (order override)
+ * v2.2.13: Fix dropdown icon/text line breaks
+ * v2.2.12: Fix dropdown icon/text line wrapping
+ * v2.2.11: Fine-tune dropdown icon vertical alignment
+ * v2.2.10: Force dropdown icons left alignment
+ * v2.2.9: Fix dropdown icons left + remove dotted item borders
+ * v2.2.8: GitHub-profile dropdown styling for menus/boundlists
+ * v2.2.7: Port full UniFi border-radius rules to element styles
+ * v2.2.6: Apply UniFi border radius values (4px/6px/8px) for visual consistency
+ * v2.2.5: Remove hover effect on already-selected treelist items
+ * v2.2.4: Toolbox tree item hover/selected highlighting using pseudo-element
+ *         for balanced left/right spacing regardless of row padding
  * v2.2.1: Remove blue outline from selected/focused items in resource tree
  *         Add borders to Guest Status panel and Notes panel
  * v2.2.0: Dialog form content padding - prevent content flushing against edges
@@ -40,10 +52,10 @@
  * - success-fg: #3fb950 - Success text
  * - success-emphasis: #238636 - Primary buttons
  * 
- * BORDER RADII:
- * - radius-sm: 3px - Small elements
- * - radius-md: 6px - Buttons, inputs
- * - radius-lg: 12px - Cards, panels
+ * BORDER RADII (UniFi-aligned):
+ * - radius-sm: 4px - Form inputs, checkboxes
+ * - radius-md: 6px - Buttons
+ * - radius-lg: 8px - Windows, panels, cards
  */
 
 /* =====================================================
@@ -81,10 +93,13 @@
     --gh-attention-fg: #d29922;
     --gh-attention-emphasis: #9e6a03;
 
-    /* Border Radii */
-    --gh-radius-sm: 3px;
+    /* Select menu active (Primer dark) */
+    --gh-selectmenu-active: #0c2d6b;
+
+    /* Border Radii - UniFi aligned */
+    --gh-radius-sm: 4px;
     --gh-radius-md: 6px;
-    --gh-radius-lg: 12px;
+    --gh-radius-lg: 8px;
 
     /* Hover overlay */
     --gh-hover-overlay: rgba(101, 108, 118, 0.2);
@@ -187,19 +202,19 @@ div.x-border-layout-ct {
     border-radius: var(--gh-radius-sm) !important;
 }
 
-/* Re-apply form inputs inside windows (6px with split corners) */
+/* Re-apply form inputs inside windows (4px with split corners - UniFi style) */
 .x-window .x-form-trigger-wrap,
 .x-window .x-form-trigger-wrap-default {
-    border-radius: var(--gh-radius-md) !important;
+    border-radius: var(--gh-radius-sm) !important;
 }
 
 .x-window .x-form-text-wrap,
 .x-window .x-form-text {
-    border-radius: var(--gh-radius-md) 0 0 var(--gh-radius-md) !important;
+    border-radius: var(--gh-radius-sm) 0 0 var(--gh-radius-sm) !important;
 }
 
 .x-window .x-form-arrow-trigger {
-    border-radius: 0 var(--gh-radius-md) var(--gh-radius-md) 0 !important;
+    border-radius: 0 var(--gh-radius-sm) var(--gh-radius-sm) 0 !important;
 }
 
 /* Form trigger/text wrap - reset and re-apply */
@@ -214,25 +229,25 @@ div.x-border-layout-ct {
 
 .x-form-trigger-wrap,
 .x-form-trigger-wrap-default {
-    border-radius: var(--gh-radius-md) !important;
+    border-radius: var(--gh-radius-sm) !important;
     overflow: hidden !important;
 }
 
 .x-form-text-wrap,
 .x-form-text-wrap-default {
-    border-radius: var(--gh-radius-md) 0 0 var(--gh-radius-md) !important;
+    border-radius: var(--gh-radius-sm) 0 0 var(--gh-radius-sm) !important;
 }
 
 .x-form-text,
 .x-form-text-default {
-    border-radius: var(--gh-radius-md) 0 0 var(--gh-radius-md) !important;
+    border-radius: var(--gh-radius-sm) 0 0 var(--gh-radius-sm) !important;
 }
 
 .x-form-trigger,
 .x-form-trigger-default,
 .x-form-arrow-trigger,
 .x-form-arrow-trigger-default {
-    border-radius: 0 var(--gh-radius-md) var(--gh-radius-md) 0 !important;
+    border-radius: 0 var(--gh-radius-sm) var(--gh-radius-sm) 0 !important;
 }
 
 /* Legend items - no rounded corners */
@@ -488,8 +503,8 @@ canvas.x-surface,
 }
 
 /* =====================================================
-   PANELS - GitHub Card Style (12px radius)
-   ===================================================== */
+    PANELS - UniFi base radius (8px)
+    ===================================================== */
 .x-panel,
 .x-panel-default {
     border-radius: var(--gh-radius-lg) !important;
@@ -665,8 +680,8 @@ div[id^="pveResourceTree"] .x-grid-cell {
 }
 
 /* =====================================================
-   SECONDARY/TOOLBAR BUTTONS (6px radius)
-   ===================================================== */
+    SECONDARY/TOOLBAR BUTTONS (4px radius)
+    ===================================================== */
 .x-btn-default-toolbar-small {
     background-color: #21262d !important;
     border: 1px solid var(--gh-border-default) !important;
@@ -706,8 +721,8 @@ div[id^="pveResourceTree"] .x-grid-cell {
 }
 
 /* =====================================================
-   FORM ELEMENTS (6px radius)
-   ===================================================== */
+    FORM ELEMENTS (4px radius)
+    ===================================================== */
 .x-form-trigger-default {
     background-color: #21262d !important;
 }
@@ -715,14 +730,14 @@ div[id^="pveResourceTree"] .x-grid-cell {
 .x-form-text-default {
     background-color: #21262d !important;
     color: var(--gh-fg-default) !important;
-    border-radius: var(--gh-radius-md) !important;
+    border-radius: var(--gh-radius-sm) !important;
 }
 
 .x-form-trigger-wrap,
 .x-form-trigger-wrap-default {
     border-color: var(--gh-border-default) !important;
     background-color: #21262d !important;
-    border-radius: var(--gh-radius-md) !important;
+    border-radius: var(--gh-radius-sm) !important;
 }
 
 .x-form-trigger-wrap-default.x-form-trigger-wrap-focus {
@@ -754,8 +769,8 @@ div[id^="pveResourceTree"] .x-grid-cell {
 }
 
 /* =====================================================
-   BOUNDLIST / DROPDOWNS (12px radius)
-   ===================================================== */
+    BOUNDLIST / DROPDOWNS (4px radius)
+    ===================================================== */
 .x-boundlist {
     background-color: var(--gh-canvas-muted) !important;
     border: 1px solid var(--gh-border-default) !important;
@@ -778,8 +793,8 @@ div[id^="pveResourceTree"] .x-grid-cell {
 }
 
 /* =====================================================
-   GRIDS / TABLES (12px radius)
-   ===================================================== */
+    GRIDS / TABLES (square corners)
+    ===================================================== */
 .x-grid,
 .x-grid-view {
     border-radius: var(--gh-radius-lg) !important;
@@ -900,7 +915,8 @@ div[id^="pveResourceTree"] .x-grid-cell {
 }
 
 /* =====================================================
-   MENUS (12px radius)
+/* =====================================================
+   MENUS (variable radius)
    ===================================================== */
 .x-menu,
 .x-menu-default {
@@ -918,33 +934,62 @@ div[id^="pveResourceTree"] .x-grid-cell {
     background-color: var(--gh-accent-emphasis) !important;
 }
 
-.x-menu-item-default.x-menu-item-separator {
-    background-color: var(--gh-canvas-muted);
-    border-color: var(--gh-border-default);
-}
-
-.x-menu-item-default.x-menu-item-focus,
-.x-menu-item-default.x-menu-item-active {
-    background-color: var(--gh-hover-overlay) !important;
-    color: var(--gh-fg-on-emphasis) !important;
+/* Menu Layout Fix (Flexbox reordering) */
+.x-menu-item-link-default {
+    display: flex !important;
+    align-items: center !important;
+    flex-direction: row !important;
+    padding: 6px 8px !important;
+    line-height: 20px !important;
+    text-decoration: none !important;
 }
 
 .x-menu-item-text-default {
     color: var(--gh-fg-default) !important;
+    font-size: 14px !important;
+    margin-left: 0 !important;
 }
 
 .x-menu-item-icon-default {
     color: var(--gh-fg-muted) !important;
+    order: -1 !important; /* Move icon to start */
+    position: relative !important;
+    float: none !important;
+    margin-right: 8px !important;
+    margin-left: 0 !important;
+    left: auto !important;
+    top: auto !important;
+    width: 16px !important;
+    text-align: center !important;
 }
 
+/* Remove the gutter/separator line */
 .x-menu-icon-separator-default {
+    display: none !important;
+}
+
+.x-menu-item-default.x-menu-item-separator {
     background-color: var(--gh-canvas-muted);
     border-color: var(--gh-border-default);
+    margin: 4px 0 !important;
+}
+
+.x-menu-item-default.x-menu-item-focus,
+.x-menu-item-default.x-menu-item-active {
+    background-color: var(--gh-accent-emphasis) !important;
+    color: var(--gh-fg-on-emphasis) !important;
+}
+
+.x-menu-item-active .x-menu-item-text-default,
+.x-menu-item-focus .x-menu-item-text-default,
+.x-menu-item-active .x-menu-item-icon-default,
+.x-menu-item-focus .x-menu-item-icon-default {
+    color: var(--gh-fg-on-emphasis) !important;
 }
 
 /* =====================================================
-   PROGRESS BARS (6px radius)
-   ===================================================== */
+    PROGRESS BARS (5px radius)
+    ===================================================== */
 .x-progress,
 .x-progress-default {
     background-color: #21262d !important;
@@ -989,8 +1034,8 @@ div[id^="pveResourceTree"] .x-grid-cell {
 }
 
 /* =====================================================
-   TABS (6px radius for tabs, 12px for bar)
-   ===================================================== */
+    TABS (6px radius for tabs, 8px for bar)
+    ===================================================== */
 .x-tab-bar,
 .x-tab-bar-default {
     background-color: var(--gh-canvas-default) !important;
@@ -1063,15 +1108,32 @@ div[id^="pveResourceTree"] .x-grid-cell {
 }
 
 /* =====================================================
-   TREE NAVIGATION (6px radius)
-   ===================================================== */
+    TREE NAVIGATION (4px radius)
+    ===================================================== */
 .x-treelist-item {
     background-color: var(--gh-canvas-default) !important;
     border-radius: var(--gh-radius-md) !important;
 }
 
+/* v2.2.4: Pseudo-element approach for balanced hover/selected highlighting */
 .x-treelist-row {
     border-radius: var(--gh-radius-md) !important;
+    background-color: transparent !important;
+    position: relative !important;
+    z-index: 0 !important;
+}
+
+.x-treelist-row::before {
+    content: "";
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    left: 0;
+    right: 4px;
+    border-radius: var(--gh-radius-md);
+    background-color: transparent;
+    z-index: -1;
+    pointer-events: none;
 }
 
 /* v2.1.4: Fix toolbox tree item text overlapping icons (icon is 24px absolute positioned) */
@@ -1087,20 +1149,29 @@ div[id^="pveResourceTree"] .x-grid-cell {
     color: #b1bac4 !important; /* Brighter than --gh-fg-muted */
 }
 
-.x-treelist-row-over,
+/* Hover state - apply to pseudo-element */
+.x-treelist-row-over {
+    background-color: transparent !important;
+}
+
+.x-treelist-row-over::before {
+    background-color: var(--gh-hover-overlay) !important;
+}
+
 .x-treelist-row-over .x-treelist-item-icon,
 .x-treelist-row-over .x-treelist-item-text {
-    background-color: var(--gh-hover-overlay) !important;
+    background-color: transparent !important;
     color: var(--gh-fg-default) !important;
 }
 
-/* Toolbox tree - selected/active item uses GitHub green */
+/* Toolbox tree - selected/active item uses GitHub green (pseudo-element) */
 .x-treelist-item-selected>.x-treelist-row {
-    background-color: var(--gh-success-emphasis) !important;
+    background-color: transparent !important;
 }
 
-.x-treelist-item-selected>.x-treelist-row:hover {
-    background-color: var(--gh-success-active) !important;
+.x-treelist-item-selected>.x-treelist-row::before,
+.x-treelist-item-selected>.x-treelist-row:hover::before {
+    background-color: var(--gh-success-emphasis) !important;
 }
 
 .x-treelist-item-selected .x-treelist-item-text,
@@ -1114,7 +1185,7 @@ div[id^="pveResourceTree"] .x-grid-cell {
 }
 
 /* =====================================================
-   WINDOWS / MODALS (12px radius)
+   WINDOWS / MODALS (variable radius)
    ===================================================== */
 .x-window,
 .x-window-default {
@@ -1125,7 +1196,7 @@ div[id^="pveResourceTree"] .x-grid-cell {
     overflow: hidden !important;
 }
 
-.x-window-header,
+.x-window .x-window-header,
 .x-window-header-default {
     background-color: var(--gh-canvas-muted) !important;
     border-color: transparent !important;
@@ -1136,7 +1207,7 @@ div[id^="pveResourceTree"] .x-grid-cell {
     background-color: rgba(1, 4, 9, 0.7);
 }
 
-.x-window-body,
+.x-window .x-window-body,
 .x-window-body-default {
     background-color: var(--gh-canvas-default) !important;
     border-color: var(--gh-border-default) !important;
@@ -1209,7 +1280,7 @@ img[id^="proxmoxLogoSvg-"][id$="-img"] {
 .proxmox-inline-button {
     background-color: #21262d !important;
     border: 1px solid #3d444d !important;
-    border-radius: 6px !important;
+    border-radius: var(--gh-radius-md) !important;
     color: #f0f6fc !important;
     transition: background 0.08s cubic-bezier(0.33, 1, 0.68, 1) !important;
 }
@@ -1302,12 +1373,12 @@ div.x-datepicker-date:hover {
 
 ::-webkit-scrollbar-track {
     background: var(--gh-canvas-default);
-    border-radius: 3px;
+    border-radius: var(--gh-radius-sm);
 }
 
 ::-webkit-scrollbar-thumb {
     background: var(--gh-border-default);
-    border-radius: 3px;
+    border-radius: var(--gh-radius-sm);
     border: 1px solid transparent;
     background-clip: padding-box;
 }
@@ -1332,4 +1403,609 @@ div.x-datepicker-date:hover {
    ===================================================== */
 .usage {
     background-color: #e6e6e6 !important;
+}
+
+/* =====================================================
+   DROPDOWNS - GitHub profile menu styling (dark)
+   ===================================================== */
+.x-menu,
+.x-menu-default {
+    background-color: var(--gh-canvas-inset) !important; /* #010409 */
+    border: 1px solid var(--gh-border-muted) !important; /* #3d444db3 */
+    border-radius: 6px !important;
+    box-shadow: 0 8px 24px rgba(1, 4, 9, 0.8) !important;
+    padding: 4px !important;
+}
+
+.x-menu-body-default {
+    background-color: transparent !important;
+    padding: 4px !important;
+}
+
+.x-menu-header {
+    background-color: transparent !important;
+    color: var(--gh-fg-default) !important;
+}
+
+.x-menu-item-link-default {
+    display: flex !important;
+    align-items: center !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    min-height: 28px !important;
+    border-radius: 6px !important;
+    padding: 6px 10px !important;
+    line-height: 20px !important;
+    border: 1px solid transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    white-space: nowrap !important;
+}
+
+.x-menu-item-text-default {
+    color: var(--gh-fg-default) !important;
+    font-size: 14px !important;
+}
+
+.x-menu-item-icon-default {
+    color: var(--gh-fg-muted) !important;
+    order: -1 !important;
+    margin-left: 0 !important;
+    margin-right: 8px !important;
+    position: relative !important;
+    left: 0 !important;
+    right: auto !important;
+    text-align: left !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 20px !important;
+    line-height: 20px !important;
+    vertical-align: middle !important;
+    top: 1px !important;
+    flex: 0 0 16px !important;
+    width: 16px !important;
+    align-self: center !important;
+    float: none !important;
+}
+
+.x-menu-item-text-default {
+    order: 1 !important;
+    margin-left: 0 !important;
+    text-align: left !important;
+    line-height: 20px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    flex: 1 1 auto !important;
+    width: auto !important;
+    white-space: nowrap !important;
+}
+
+.x-menu-item-link-default > .x-menu-item-icon-default,
+.x-menu-item-link-default > .x-menu-item-text-default {
+    width: auto !important;
+    max-width: none !important;
+}
+
+.x-menu-item-arrow,
+.x-menu-item-arrow-default {
+    order: 2 !important;
+    margin-left: auto !important;
+}
+
+.x-menu-item-default.x-menu-item-separator {
+    background-color: #21262d !important;
+    border: none !important;
+    height: 1px !important;
+    margin: 6px 4px !important;
+}
+
+.x-menu-item-default.x-menu-item-focus,
+.x-menu-item-default.x-menu-item-active,
+.x-menu-item:hover {
+    background-color: var(--gh-canvas-muted) !important; /* #151b23 */
+    color: var(--gh-fg-default) !important;
+    border-radius: 6px !important;
+}
+
+.x-menu-item-active .x-menu-item-text-default,
+.x-menu-item-focus .x-menu-item-text-default {
+    color: var(--gh-fg-default) !important;
+}
+
+/* Combo dropdowns (selects, boundlists) */
+.x-boundlist {
+    background-color: var(--gh-canvas-inset) !important;
+    border: 1px solid var(--gh-border-muted) !important;
+    border-radius: 6px !important;
+    box-shadow: 0 8px 24px rgba(1, 4, 9, 0.8) !important;
+    padding: 4px !important;
+    overflow: hidden !important;
+}
+
+.x-boundlist-item {
+    border-radius: 6px !important;
+    padding: 6px 10px !important;
+    line-height: 20px !important;
+    border: 1px solid transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.x-boundlist-item-over {
+    background-color: var(--gh-canvas-muted) !important; /* #151b23 */
+}
+
+.x-boundlist-selected {
+    background-color: var(--gh-selectmenu-active) !important; /* #0c2d6b */
+    color: var(--gh-fg-on-emphasis) !important;
+}
+
+/* Floating grid pickers (storage/ISO selectors) */
+.x-layer.x-grid .x-grid-view,
+.x-panel.x-layer.x-grid .x-grid-view,
+.x-panel.x-layer.x-grid,
+.x-layer.x-panel.x-grid {
+    border-radius: 6px !important;
+}
+
+.x-layer.x-grid .x-grid-item-over,
+.x-layer.x-grid .x-grid-item-selected,
+.x-panel.x-layer.x-grid .x-grid-item-over,
+.x-panel.x-layer.x-grid .x-grid-item-selected {
+    border-radius: 6px !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.x-layer.x-grid .x-grid-item-over td:first-child,
+.x-layer.x-grid .x-grid-item-selected td:first-child,
+.x-panel.x-layer.x-grid .x-grid-item-over td:first-child,
+.x-panel.x-layer.x-grid .x-grid-item-selected td:first-child {
+    border-radius: 6px 0 0 6px !important;
+}
+
+.x-layer.x-grid .x-grid-item-over td:last-child,
+.x-layer.x-grid .x-grid-item-selected td:last-child,
+.x-panel.x-layer.x-grid .x-grid-item-over td:last-child,
+.x-panel.x-layer.x-grid .x-grid-item-selected td:last-child {
+    border-radius: 0 6px 6px 0 !important;
+}
+
+/* =====================================================
+   UNIFI BORDER-RADIUS PARITY (ported from theme-unifi.css)
+   ===================================================== */
+.x-border-box,
+.x-border-box * {
+    border-radius: var(--gh-radius-lg);
+}
+
+/* Remove rounded corners from grids/tables/lists (Tasks, logs) */
+.x-grid,
+.x-grid *,
+.x-grid-header-ct,
+.x-grid-header-ct *,
+.x-grid-view,
+.x-grid-view *,
+.x-column-header,
+.x-column-header *,
+.x-grid-item,
+.x-grid-cell,
+.x-grid-cell-inner,
+.x-grid-row,
+table,
+table *,
+tr,
+td,
+th,
+.x-legend,
+.x-legend *,
+.x-legend-container,
+.x-legend-container *,
+.x-legend-item,
+.x-legend-horizontal .x-legend-item,
+.x-legend-vertical .x-legend-item,
+.x-legend-horizontal .x-legend-item:first-child,
+.x-legend-horizontal .x-legend-item:last-child,
+.x-legend-vertical .x-legend-item:first-child,
+.x-legend-vertical .x-legend-item:last-child,
+.x-tool,
+.x-tool-tool-el,
+.x-tool-default,
+.x-tool-img {
+    border-radius: 0 !important;
+}
+
+/* Form elements - exclude from global radius */
+.x-form-item,
+.x-form-item-default,
+.x-form-item-body,
+.x-form-item-body-default,
+.x-form-text-field-body,
+.x-form-text-field-body-default,
+.x-form-fieldcontainer,
+.x-field,
+.x-field-default,
+.x-form-type-text {
+    border-radius: 0 !important;
+}
+
+/* Reset layout containers that clip form elements */
+.x-box-layout-ct,
+.x-panel-bodyWrap,
+.x-panel-bodyWrap-default,
+.x-autocontainer-innerCt,
+.x-autocontainer-outerCt,
+.x-panel.x-tabpanel-child,
+.x-panel.x-box-item,
+.x-box-inner,
+.x-box-target,
+.x-container,
+.x-container-default,
+.x-window .x-panel-body,
+.x-window .x-window-body,
+.x-window .x-window-bodyWrap {
+    border-radius: 0 !important;
+}
+
+/* Reset everything inside windows to 0 - then re-apply specific radii */
+.x-window *,
+.x-window .x-autocontainer-innerCt,
+.x-window .x-autocontainer-outerCt,
+.x-window .x-form-layout-wrap,
+.x-window .x-form-layout-auto-label,
+.x-window .x-form-layout-colgroup,
+.x-window .x-form-layout-column,
+.x-window .x-field,
+.x-window .x-form-item,
+.x-window .x-form-item-body {
+    border-radius: 0 !important;
+}
+
+.x-window,
+.x-window-default {
+    border-radius: 8px !important;
+}
+
+.x-window-header,
+.x-window-header-default {
+    border-radius: 8px 8px 0 0 !important;
+}
+
+.x-window .x-window-body,
+.x-window-body-default {
+    border-radius: 0 !important;
+}
+
+.x-window .x-btn {
+    border-radius: 6px !important;
+}
+
+.x-window .x-form-checkbox {
+    border-radius: 4px !important;
+}
+
+.x-window .x-form-trigger-wrap,
+.x-window .x-form-trigger-wrap-default {
+    border-radius: 4px !important;
+}
+
+.x-window .x-form-text-wrap,
+.x-window .x-form-text {
+    border-radius: 4px 0 0 4px !important;
+}
+
+.x-window .x-form-arrow-trigger {
+    border-radius: 0 4px 4px 0 !important;
+}
+
+.x-form-trigger-wrap,
+.x-form-trigger-wrap *,
+.x-form-text-wrap,
+.x-form-text-wrap *,
+.x-form-text,
+.x-form-trigger {
+    border-radius: 0 !important;
+}
+
+.x-form-trigger-wrap,
+.x-form-trigger-wrap-default {
+    border-radius: 4px !important;
+}
+
+.x-form-text-wrap,
+.x-form-text-wrap-default {
+    border-radius: 4px 0 0 4px !important;
+}
+
+.x-form-text,
+.x-form-text-default {
+    border-radius: 4px 0 0 4px !important;
+}
+
+.x-form-trigger,
+.x-form-trigger-default,
+.x-form-arrow-trigger,
+.x-form-arrow-trigger-default {
+    border-radius: 0 4px 4px 0 !important;
+}
+
+.x-legend-item-marker {
+    border-radius: 50% !important;
+}
+
+/* Checkboxes & radios */
+.x-form-checkbox,
+.x-form-checkbox-default {
+    border-radius: 4px !important;
+}
+
+.x-form-radio,
+.x-form-radio-default {
+    border-radius: 50% !important;
+}
+
+.x-form-radio::after {
+    border-radius: 50% !important;
+}
+
+/* Buttons */
+.x-btn-default-small {
+    border-radius: 6px !important;
+}
+
+.x-btn-default-toolbar-small {
+    border-radius: 4px !important;
+}
+
+.x-btn.x-btn-default-small:has(.fa-check) {
+    border-radius: 4px !important;
+}
+
+/* Boundlist dropdowns */
+.x-boundlist {
+    border-radius: 4px !important;
+}
+
+.x-boundlist-item {
+    border-radius: 4px !important;
+}
+
+.x-boundlist-list-ct {
+    border-radius: 4px !important;
+}
+
+.x-boundlist-item-over,
+.x-boundlist-selected {
+    border-radius: 4px !important;
+}
+
+/* Menus */
+.x-menu,
+.x-menu-default {
+    border-radius: 8px !important;
+}
+
+.x-menu-item-default.x-menu-item-focus,
+.x-menu-item-default.x-menu-item-active,
+.x-menu-item:hover {
+    border-radius: 6px !important;
+}
+
+/* Tooltips */
+.x-tip-default {
+    border-radius: 6px !important;
+}
+
+/* Tree list items */
+.x-treelist-item,
+.x-treelist-item-tool {
+    border-radius: 4px !important;
+}
+
+.x-treelist-row,
+.x-treelist-row:hover,
+.x-treelist-row-over,
+.x-treelist-item-selected>.x-treelist-row,
+.x-treelist-item-selected>.x-treelist-row:hover,
+.x-treelist-item-expanded>.x-treelist-row,
+.x-treelist-item-expanded>.x-treelist-row-over,
+.x-treelist-item-expandable>.x-treelist-row,
+.x-treelist-item-expandable>.x-treelist-row-over {
+    border-radius: 4px !important;
+}
+
+.x-treelist-row::before {
+    border-radius: 4px !important;
+}
+
+.x-treelist-item-wrap,
+.x-treelist-item-text,
+.x-treelist-row,
+.x-treelist-container,
+.x-treelist-root-container,
+.x-treelist,
+.x-treelist-pve-nav {
+    border-radius: 4px !important;
+}
+
+/* Window message mask */
+.x-mask-msg {
+    border-radius: 8px !important;
+}
+
+/* Tags */
+.pve-edit-tag {
+    border-radius: 6px !important;
+}
+
+.x-tree-node-text .proxmox-tag-dark,
+.x-tree-node-text .proxmox-tag-light,
+.x-grid-cell-inner .proxmox-tag-dark,
+.x-grid-cell-inner .proxmox-tag-light,
+span.proxmox-tag-dark,
+span.proxmox-tag-light {
+    border-radius: 6px !important;
+}
+
+/* Usage bars */
+.usage-wrapper,
+.usage {
+    border-radius: 2px !important;
+}
+
+/* Progress bars */
+.x-progress,
+.x-progress-default {
+    border-radius: 5px !important;
+}
+
+.x-progress-bar,
+.x-progress-bar-default,
+.x-progress-default .x-progress-bar-default {
+    border-radius: 5px !important;
+}
+
+/* Scrollbar thumb */
+::-webkit-scrollbar-thumb {
+    border-radius: 4px !important;
+}
+
+/* Summary/stats panels */
+.pveStatusPanel,
+.x-panel-default-framed,
+.x-panel-body-default-framed {
+    border-radius: 12px !important;
+}
+
+[id^="pveGuestStatusView-"][id$="-body"],
+[id^="pmxNotesView-"] .x-panel-body {
+    border-radius: 8px !important;
+}
+
+.x-panel-header-default-framed {
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.pve-info-grid,
+.x-panel-default .x-grid,
+.x-container .x-grid-view {
+    border-radius: 12px !important;
+}
+
+.x-form-display-field-default {
+    border-radius: 6px !important;
+}
+
+.pve-rrdview,
+.rrdview {
+    border-radius: 12px !important;
+}
+
+.pve-summary-status,
+.x-container .pve-status {
+    border-radius: 8px !important;
+}
+
+.x-panel-default[id*="notes"],
+.pve-notes-view {
+    border-radius: 8px !important;
+}
+
+.x-fieldset {
+    border-radius: 8px !important;
+}
+
+/* Grid row hover/selection - rounded corners */
+.x-grid-item-over,
+.x-grid-item-selected,
+.x-grid-item-focused,
+.x-grid-with-row-lines .x-grid-item.x-grid-item-over,
+.x-grid-with-row-lines .x-grid-item.x-grid-item-selected {
+    border-radius: 8px !important;
+}
+
+/* Tab hover/active corners */
+.x-tab-default.x-tab-over,
+.x-tab-default.x-tab.x-tab-active {
+    border-radius: 6px 6px 0 0 !important;
+}
+
+/* Segmented buttons */
+.x-segmented-button {
+    border-radius: 6px !important;
+}
+
+.x-segmented-button .x-btn,
+.x-segmented-button .x-btn-default-small,
+.x-segmented-button .x-btn-inner,
+.x-segmented-button .x-btn-wrap {
+    border-radius: 6px !important;
+}
+
+/* Summary page widget panels */
+.x-panel.x-column>.x-panel-bodyWrap>.x-panel-body.x-panel-body-default {
+    border-radius: 8px !important;
+}
+
+/* Floating grid pickers (storage/ISO selectors) */
+.x-layer.x-grid .x-grid-view,
+.x-panel.x-layer.x-grid .x-grid-view {
+    border-radius: 4px !important;
+}
+
+.x-panel.x-layer.x-grid,
+.x-layer.x-panel.x-grid {
+    border-radius: 4px !important;
+}
+
+.x-layer.x-grid .x-grid-item-over,
+.x-layer.x-grid .x-grid-item-selected,
+.x-panel.x-layer.x-grid .x-grid-item-over,
+.x-panel.x-layer.x-grid .x-grid-item-selected {
+    border-radius: 4px !important;
+}
+
+.x-layer.x-grid .x-grid-item-over td,
+.x-layer.x-grid .x-grid-item-selected td,
+.x-layer.x-grid .x-grid-item-over .x-grid-cell,
+.x-layer.x-grid .x-grid-item-selected .x-grid-cell,
+.x-panel.x-layer.x-grid .x-grid-item-over td,
+.x-panel.x-layer.x-grid .x-grid-item-selected td,
+.x-panel.x-layer.x-grid .x-grid-item-over .x-grid-cell,
+.x-panel.x-layer.x-grid .x-grid-item-selected .x-grid-cell {
+    border-radius: 0 !important;
+}
+
+.x-layer.x-grid .x-grid-item-over td:first-child,
+.x-layer.x-grid .x-grid-item-selected td:first-child,
+.x-panel.x-layer.x-grid .x-grid-item-over td:first-child,
+.x-panel.x-layer.x-grid .x-grid-item-selected td:first-child {
+    border-radius: 4px 0 0 4px !important;
+}
+
+.x-layer.x-grid .x-grid-item-over td:last-child,
+.x-layer.x-grid .x-grid-item-selected td:last-child,
+.x-panel.x-layer.x-grid .x-grid-item-over td:last-child,
+.x-panel.x-layer.x-grid .x-grid-item-selected td:last-child {
+    border-radius: 0 4px 4px 0 !important;
+}
+
+/* Charts - remove border-radius from data area only */
+canvas.x-surface-canvas,
+.x-surface-canvas,
+.x-draw-component canvas,
+.proxmox-rrd-chart canvas {
+    border-radius: 0 !important;
+}
+
+svg.x-surface {
+    border-radius: 0 !important;
+}
+
+.x-draw-container,
+.x-surface {
+    border-radius: 0 !important;
 }
