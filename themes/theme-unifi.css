@@ -2,7 +2,7 @@
 /*
  * ProxMorph Theme: UniFi
  * Authentic recreation of Ubiquiti UniFi Network Application UI
- * Version: 5.89
+ * Version: 5.93
  * Author: N.E.S.T. / Dr. Dranglog
  * 
  * UniFi Color Palette (extracted from live instance):
@@ -2486,6 +2486,29 @@ a:hover {
     right: 3.8px !important;
 }
 
+/* v5.90: Lock icons (migrate, backup, suspend) override running dot
+   When VM is both running AND locked for operation, show the lock icon instead of green dot */
+.x-tree-icon-custom.running.lock-migrate::after,
+.x-grid-icon-custom.running.lock-migrate::after {
+    content: "\f1d9" !important; /* FontAwesome paper-plane (migrate) */
+    font-size: 0.75em !important;
+    color: var(--pm-warning) !important; /* Amber to indicate operation in progress */
+}
+
+.x-tree-icon-custom.running.lock-backup::after,
+.x-grid-icon-custom.running.lock-backup::after {
+    content: "\f0c7" !important; /* FontAwesome save/floppy (backup) */
+    font-size: 0.75em !important;
+    color: var(--pm-warning) !important;
+}
+
+.x-tree-icon-custom.running.lock-suspending::after,
+.x-grid-icon-custom.running.lock-suspending::after {
+    content: "\f019" !important; /* FontAwesome download (suspending) */
+    font-size: 0.75em !important;
+    color: var(--pm-warning) !important;
+}
+
 .x-tree-icon-custom.stopped::before,
 .x-grid-icon-custom.stopped::before {
     color: var(--pm-text-disabled);
@@ -2493,10 +2516,11 @@ a:hover {
 
 /* =====================================================
    SCROLLBARS - Minimal, dark (UniFi authentic)
+   v5.93: Increased width from 8px to 12px for better clickability
    ===================================================== */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 12px;
+    height: 12px;
 }
 
 ::-webkit-scrollbar-track {
@@ -3526,10 +3550,13 @@ body .x-window .x-panel .x-panel-bodyWrap>.x-tab-bar+.x-panel-body.x-panel-body-
     padding: 0 !important;
 }
 
-/* STEP 5: Fix overflow clipping - allow visible overflow in modal panels */
-.x-window .x-panel-body {
-    overflow: visible !important;
-}
+/* v5.93: REMOVED overflow: visible rule that was breaking log viewer scrolling
+   The original rule was:
+     .x-window .x-panel-body { overflow: visible !important; }
+   This was added to "fix overflow clipping - allow visible overflow in modal panels"
+   but it breaks task viewer / log viewer scroll functionality.
+   If clipping issues appear elsewhere, use more targeted selectors.
+*/
 
 /* But keep auto overflow on the main window body for scrolling */
 /* .x-window .x-window-body {

@@ -5,9 +5,19 @@ All notable changes to ProxMorph will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.2.5] - 2025-01-26
 
 ### Fixed
+- **UniFi Theme (v5.93)**:
+  - Fixed task viewer/log viewer issues: content not visible on open, scrollbar not clickable, no auto-scroll to bottom
+  - Root cause: `overflow: visible !important` rule on `.x-window .x-panel-body` completely broke native ExtJS scroll handling
+  - Solution: **Removed the problematic overflow rule entirely** - the rule was added for "modal clipping" but caused more issues than it solved
+  - Increased scrollbar width from 8px to 12px for better clickability (was hard to click near window edge)
+- **UniFi Theme (v5.90)**:
+  - Fixed migrate icon missing in resource tree when VM/CT is being migrated
+  - Root cause: `.running::after` rule (green status dot) has `content: "\f111" !important` which overrides `.lock-migrate::after` content when both classes are present
+  - Solution: Added more specific `.running.lock-migrate::after` selector that shows the migrate icon (paper-plane) with amber color
+  - Also added rules for `.lock-backup` and `.lock-suspending` states
 - **UniFi Theme (v5.89)**:
   - Fixed delete dialog warning text "Referenced disks will always be destroyed." being cut off
   - Root cause: ExtJS box layout set narrow container width (236px) causing text wrap, then 0px height due to absolute positioning
